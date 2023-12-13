@@ -10,28 +10,84 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  content   String?
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-}
-
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int     @unique
-}
-
 model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  posts   Post[]
-  profile Profile?
+  id             Int           @id @default(autoincrement())
+  name           String
+  email          String
+  referredBy     String?
+  payoutMethod   PayoutMethod?
+  paypalInfo     PaypalInfo?
+  venmoInfo      VenmoInfo?
+  cashappInfo    CashappInfo?
+  referredOrders Order[]
+  rewards        Reward[]
+  payouts        Payout[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model Order {
+  id             Int         @id @default(autoincrement())
+  shopifyOrderId String      @unique
+  referredBy     User        @relation(fields: [referredById], references: [id])
+  referredById   Int
+  status         OrderStatus @default(PENDING)
+  rewards        Reward[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model Reward {
+  id            Int      @id @default(autoincrement())
+  amount        Int
+  createdFrom   Order    @relation(fields: [createdFromId], references: [id])
+  createdFromId Int
+  givenTo       User     @relation(fields: [givenToId], references: [id])
+  givenToId     Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Payout {
+  id        Int          @id @default(autoincrement())
+  amount    Int
+  givenTo   User         @relation(fields: [givenToId], references: [id])
+  givenToId Int
+  status    PayoutStatus @default(UNPAID)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model PaypalInfo {
+  user     User   @relation(fields: [userId], references: [id])
+  userId   Int    @unique
+  username String
+}
+
+model VenmoInfo {
+  user     User   @relation(fields: [userId], references: [id])
+  userId   Int    @unique
+  username String
+}
+
+model CashappInfo {
+  user     User   @relation(fields: [userId], references: [id])
+  userId   Int    @unique
+  username String
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+}
+
+enum PayoutStatus {
+  UNPAID
+  PAID
+}
+
+enum PayoutMethod {
+  PAYPAL
+  VENMO
+  CASHAPP
 }
