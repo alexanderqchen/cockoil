@@ -1,7 +1,7 @@
-const dotenv = require("dotenv");
+import dotenv from "dotenv";
 dotenv.config();
 
-const { fetchShopify } = require("../helpers/fetch");
+import { fetchShopify } from "../helpers/fetch";
 
 const run = async () => {
   const orders = await fetchShopify(
