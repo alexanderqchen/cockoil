@@ -11,10 +11,12 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.7.0",
+    "commander": "^11.1.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2"
   },
   "devDependencies": {
+    "@commander-js/extra-typings": "^11.1.0",
     "@types/express": "^4.17.21",
     "@types/node": "^20.10.4",
     "prisma": "^5.7.0",

@@ -14,7 +14,9 @@ model User {
   id             Int           @id @default(autoincrement())
   name           String
   email          String
-  referredBy     String?
+  referredById   Int?
+  referredBy     User?         @relation("UserReferrals", fields: [referredById], references: [id])
+  referredUsers  User[]        @relation("UserReferrals")
   payoutMethod   PayoutMethod?
   paypalInfo     PaypalInfo?
   venmoInfo      VenmoInfo?
@@ -24,13 +26,14 @@ model User {
   payouts        Payout[]
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
+  userId         Int?
 }
 
 model Order {
   id             Int         @id @default(autoincrement())
   shopifyOrderId String      @unique
-  referredBy     User        @relation(fields: [referredById], references: [id])
-  referredById   Int
+  referredBy     User?       @relation(fields: [referredById], references: [id])
+  referredById   Int?
   status         OrderStatus @default(PENDING)
   rewards        Reward[]
   createdAt      DateTime    @default(now())
