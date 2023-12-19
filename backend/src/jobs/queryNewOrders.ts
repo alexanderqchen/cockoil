@@ -3,8 +3,10 @@ dotenv.config();
 
 import { Command, Option } from "@commander-js/extra-typings";
 import { PrismaClient } from "@prisma/client";
+import type { Order } from "@prisma/client";
 import { fetchShopify } from "../helpers/fetch";
 import { getUserFromReferralCode } from "../helpers/referrals";
+import { calculateReward } from "../helpers/rewards";
 
 const prisma = new PrismaClient();
 
@@ -77,6 +79,39 @@ const getReferredByForOrder = (shopifyOrder: any) => {
   }
 
   return referredBy;
+};
+
+// TODO: Finish this and integrate into script
+const createRewardsForOrder = async (order: Order, prisma: PrismaClient) => {
+  const maximumDiscount = 100; // Should come from constant file or new model
+
+  let referredById = order.referredById;
+  let distance = 0;
+
+  while (referredById) {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: referredById,
+      },
+    });
+
+    if (!user) {
+      break;
+    }
+
+    const reward = await prisma.reward.create({
+      data: {
+        createdFromId: order.id,
+        givenToId: user.id,
+        amount: calculateReward(maximumDiscount, distance),
+      },
+    });
+
+    console.log("Created reward: ", reward);
+
+    referredById = user.referredById;
+    distance++;
+  }
 };
 
 const run = async () => {
