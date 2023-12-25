@@ -3,10 +3,18 @@ dotenv.config();
 
 import { Command, Option } from "@commander-js/extra-typings";
 import { PrismaClient } from "@prisma/client";
-import type { Order } from "@prisma/client";
+import type { User } from "@prisma/client";
+import { keyBy } from "lodash";
 import { fetchShopify } from "../helpers/fetch";
 import { getUserFromReferralCode } from "../helpers/referrals";
 import { calculateReward } from "../helpers/rewards";
+import productList from "../constants/products.json";
+
+type OrderData = {
+  shopifyOrderId: string;
+  referredById: number | undefined;
+  items: string[];
+};
 
 const prisma = new PrismaClient();
 
@@ -20,6 +28,8 @@ const program = new Command()
   .addOption(new Option("--verbose", "Print orders to create"))
   .parse();
 const options = program.opts();
+
+const products = keyBy(productList, "id");
 
 const createShopifyParams = () => {
   const now = new Date();
@@ -81,12 +91,33 @@ const getReferredByForOrder = (shopifyOrder: any) => {
   return referredBy;
 };
 
-// TODO: Finish this and integrate into script
-const createRewardsForOrder = async (order: Order, prisma: PrismaClient) => {
-  const maximumDiscount = 100; // Should come from constant file or new model
+const createRewardsForOrder = async (
+  order: OrderData,
+  prisma: PrismaClient
+) => {
+  let maximumDiscount = 0;
 
-  let referredById = order.referredById;
+  order.items.forEach((productId) => {
+    const productMaxDiscount = products[productId]?.maximumDiscount;
+
+    if (!productMaxDiscount) {
+      console.log(`Unrecognized product id ${productId}`);
+    } else {
+      maximumDiscount += productMaxDiscount;
+    }
+  });
+
+  if (maximumDiscount === 0) {
+    return [];
+  }
+
+  let referredById = order.referredById || null;
+  // let referredById = 2 as number | null; // For testing purposes
   let distance = 0;
+
+  const rewards = [];
+
+  console.log();
 
   while (referredById) {
     const user = await prisma.user.findUnique({
@@ -99,27 +130,35 @@ const createRewardsForOrder = async (order: Order, prisma: PrismaClient) => {
       break;
     }
 
-    const reward = await prisma.reward.create({
-      data: {
-        createdFromId: order.id,
-        givenToId: user.id,
-        amount: calculateReward(maximumDiscount, distance),
-      },
+    rewards.push({
+      amount: calculateReward(maximumDiscount, distance),
+      givenToId: referredById,
     });
-
-    console.log("Created reward: ", reward);
 
     referredById = user.referredById;
     distance++;
   }
+
+  return rewards;
 };
 
 const run = async () => {
   const params = createShopifyParams();
+
+  console.log("Fetching order data from Shopify...");
   const shopifyOrders = (
     await fetchShopify(`/admin/api/2023-10/orders.json?${params}`)
   ).orders;
 
+  console.log(`Fetched ${shopifyOrders.length} orders from Shopify`);
+
+  if (options.verbose) {
+    console.log(JSON.stringify(shopifyOrders, null, 2));
+  }
+
+  /**
+   * Create Orders objects
+   */
   const ordersToCreate = [];
 
   for (const shopifyOrder of shopifyOrders) {
@@ -127,24 +166,38 @@ const run = async () => {
       continue;
     }
 
-    ordersToCreate.push({
+    const orderData = {
       shopifyOrderId: shopifyOrder.id.toString(),
-      referredBy: await getReferredByForOrder(shopifyOrder),
+      referredById: (await getReferredByForOrder(shopifyOrder))?.id,
+      items: shopifyOrder.line_items.map(
+        ({ product_id }: { product_id: number }) => product_id.toString()
+      ),
+    };
+
+    const rewards = await createRewardsForOrder(orderData, prisma);
+
+    ordersToCreate.push({
+      ...orderData,
+      rewards: {
+        create: rewards,
+      },
     });
   }
 
   let numOrdersCreated = 0;
 
+  console.log(`Creating ${ordersToCreate.length} new orders...`);
   if (options.verbose) {
-    console.log("Creating these orders:");
-    console.log(ordersToCreate);
+    console.log(JSON.stringify(ordersToCreate, null, 2));
   }
 
   if (!options.dryrun) {
-    const { count } = await prisma.order.createMany({
-      data: ordersToCreate,
-    });
-    numOrdersCreated = count;
+    for (const orderToCreate of ordersToCreate) {
+      await prisma.order.create({
+        data: orderToCreate,
+      });
+      numOrdersCreated++;
+    }
   }
 
   console.log(

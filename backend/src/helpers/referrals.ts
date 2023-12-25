@@ -7,7 +7,7 @@ export const generateReferralCode = (user: User) => {
 export const getUserFromReferralCode = async (
   referralCode: string,
   prisma: PrismaClient
-) => {
+): Promise<User | null> => {
   const userId = parseInt(referralCode.split("_")[1]);
 
   return await prisma.user.findUnique({
