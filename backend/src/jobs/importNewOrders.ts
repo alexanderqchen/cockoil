@@ -3,7 +3,6 @@ dotenv.config();
 
 import { Command, Option } from "@commander-js/extra-typings";
 import { PrismaClient } from "@prisma/client";
-import type { User } from "@prisma/client";
 import { keyBy } from "lodash";
 import { fetchShopify } from "../helpers/fetch";
 import { getUserFromReferralCode } from "../helpers/referrals";

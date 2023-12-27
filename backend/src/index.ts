@@ -1,36 +1,12 @@
-import { PrismaClient } from "@prisma/client";
+import dotenv from "dotenv";
+dotenv.config();
 
-const prisma = new PrismaClient();
+import express from "express";
+import { router } from "./routes";
 
-async function main() {
-  await prisma.user.create({
-    data: {
-      name: "Alice",
-      email: "alice@prisma.io",
-      posts: {
-        create: { title: "Hello World" },
-      },
-      profile: {
-        create: { bio: "I like turtles" },
-      },
-    },
-  });
+const app = express();
+app.use("/", router);
 
-  const allUsers = await prisma.user.findMany({
-    include: {
-      posts: true,
-      profile: true,
-    },
-  });
-  console.dir(allUsers, { depth: null });
-}
-
-main()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    process.exit(1);
-  });
+app.listen(process.env.PORT, () =>
+  console.log(`Listening on port ${process.env.PORT}...`)
+);
