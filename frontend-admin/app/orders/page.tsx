@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import Table from "@/components/Table";
 import { getOrders } from "@/api";
 import { formatDate } from "@/helpers";
+import { CheckCircleIcon } from "@heroicons/react/24/outline";
 
 type Props = {
   searchParams: { [key: string]: string | undefined };
@@ -33,9 +35,26 @@ const Orders = async ({ searchParams }: Props) => {
     updatedAt: formatDate(order.updatedAt),
   }));
 
+  const { count: numPendingOrders } = await getOrders({
+    status: "PENDING",
+  });
+
   return (
     <>
       <h1 className="text-3xl mb-8">Orders</h1>
+      {numPendingOrders > 0 ? (
+        <Link
+          href="/orders/process"
+          className="absolute top-4 right-4 py-2 px-4 bg-slate-700 rounded-md text-gray-200 font-medium"
+        >
+          PROCESS ORDERS ({numPendingOrders})
+        </Link>
+      ) : (
+        <p className="flex absolute top-4 right-4 py-2 px-4 text-green-800">
+          <CheckCircleIcon className="h-6 w-6 mr-1" />
+          All Orders Processed
+        </p>
+      )}
 
       <Table
         page={pageInt}

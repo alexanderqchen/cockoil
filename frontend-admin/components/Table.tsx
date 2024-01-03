@@ -13,7 +13,7 @@ const Table = ({
   columns,
   items,
 }: {
-  skeleton: boolean;
+  skeleton?: boolean;
   page: number;
   pageSize: number;
   count: number;
@@ -42,7 +42,7 @@ const Table = ({
                 {columns.map(({ key }) => (
                   <td className="px-6 py-4" key={number + key}>
                     <div
-                      className={`w-40 h-4 bg-slate-400 rounded-md animate-pulse`}
+                      className={`w-40 h-4 bg-slate-300 rounded-md animate-pulse`}
                     />
                   </td>
                 ))}
