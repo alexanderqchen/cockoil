@@ -1,8 +1,6 @@
 import express from "express";
 import Joi from "joi";
 import { PrismaClient, OrderStatus } from "@prisma/client";
-import type { OrderStatus as OrderStatusType } from "@prisma/client";
-import { getPaginationOptions } from "../helpers/pagination";
 
 export const router = express.Router();
 const prisma = new PrismaClient();
@@ -23,18 +21,30 @@ router.get("/", async (req, res) => {
   }
 
   const { limit, offset, status } = query;
+  const where = {
+    status,
+  };
 
   const prismaOptions = {
     skip: offset,
     take: limit,
-    where: {
-      status,
-    },
+    orderBy: [
+      {
+        id: "desc",
+      },
+    ] as any,
+    where,
   };
 
-  const orders = await prisma.order.findMany(prismaOptions);
+  const [count, orders] = await prisma.$transaction([
+    prisma.order.count({ where }),
+    prisma.order.findMany(prismaOptions),
+  ]);
 
-  return res.status(200).json(orders);
+  return res.status(200).json({
+    count,
+    data: orders,
+  });
 });
 
 router.patch("/:orderId", async (req, res) => {

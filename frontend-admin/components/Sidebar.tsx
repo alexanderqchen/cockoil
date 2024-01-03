@@ -14,7 +14,7 @@ const Sidebar = ({ items }: { items: SidebarItem[] }) => {
       <Image src={logo} alt="logo" className="mt-4 mb-8 mx-auto" priority />
       <ul>
         {items.map(({ title, route, active }) => (
-          <Link href={route}>
+          <Link href={route} key={route}>
             <li
               className={`py-4 px-8 text-lg ${
                 active && "bg-[#EB5757] bg-opacity-20	font-medium"
