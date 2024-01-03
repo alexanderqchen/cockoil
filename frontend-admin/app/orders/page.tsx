@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import Table from "@/components/Table";
 import { getOrders } from "@/api";
@@ -12,17 +11,8 @@ type Props = {
 const PAGE_SIZE = 20;
 
 const Orders = async ({ searchParams }: Props) => {
-  const { page } = searchParams;
-
-  if (!page) {
-    const newSearchParams = new URLSearchParams({
-      ...searchParams,
-      page: "1",
-    });
-    redirect("/orders?" + newSearchParams.toString());
-  }
-
-  const pageInt = parseInt(page);
+  const page = searchParams.page;
+  const pageInt = page ? parseInt(page) : 1;
 
   const { count, data: orders } = await getOrders({
     page: pageInt,
@@ -44,7 +34,7 @@ const Orders = async ({ searchParams }: Props) => {
       <h1 className="text-3xl mb-8">Orders</h1>
       {numPendingOrders > 0 ? (
         <Link
-          href="/orders/process"
+          href="/process/orders"
           className="absolute top-4 right-4 py-2 px-4 bg-slate-700 rounded-md text-gray-200 font-medium"
         >
           PROCESS ORDERS ({numPendingOrders})
