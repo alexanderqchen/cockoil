@@ -43,7 +43,7 @@ const PaginationFooter = ({
               }}
               onClick={() => setLoading(true)}
               className={`mx-2 ${
-                page === 1 && "text-gray-300 pointer-events-none"
+                page <= 1 && "text-gray-300 pointer-events-none"
               }`}
             >
               <ChevronLeftIcon className="h-6 w-6" />
