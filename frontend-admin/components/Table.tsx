@@ -7,6 +7,8 @@ type Column = {
 
 const Table = ({
   skeleton,
+  pathname,
+  itemName,
   page,
   pageSize,
   count,
@@ -14,6 +16,8 @@ const Table = ({
   items,
 }: {
   skeleton?: boolean;
+  pathname: string;
+  itemName: string;
   page: number;
   pageSize: number;
   count: number;
@@ -42,7 +46,7 @@ const Table = ({
                 {columns.map(({ key }) => (
                   <td className="px-6 py-4" key={number + key}>
                     <div
-                      className={`w-40 h-4 bg-slate-300 rounded-md animate-pulse`}
+                      className={`w-30 h-4 bg-slate-300 rounded-md animate-pulse`}
                     />
                   </td>
                 ))}
@@ -50,6 +54,8 @@ const Table = ({
             ))}
           </tbody>
           <PaginationFooter
+            pathname={pathname}
+            itemName={itemName}
             numColumns={columns.length}
             page={page}
             pageSize={pageSize}
@@ -87,6 +93,8 @@ const Table = ({
           ))}
         </tbody>
         <PaginationFooter
+          pathname={pathname}
+          itemName={itemName}
           numColumns={columns.length}
           page={page}
           pageSize={pageSize}

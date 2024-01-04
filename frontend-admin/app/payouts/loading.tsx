@@ -2,17 +2,17 @@ import Table from "@/components/Table";
 
 const Loading = () => (
   <>
-    <h1 className="text-3xl mb-8">Orders</h1>
+    <h1 className="text-3xl mb-8">Payouts</h1>
     <Table
       skeleton
-      pathname="/orders"
-      itemName="Orders"
+      pathname="/payouts"
+      itemName="Payouts"
       page={0}
       pageSize={0}
       count={0}
       columns={[
         {
-          title: "Order ID",
+          title: "Payout ID",
           key: "id",
         },
         {
@@ -20,8 +20,16 @@ const Loading = () => (
           key: "status",
         },
         {
-          title: "Shopify ID",
-          key: "shopifyOrderId",
+          title: "Amount",
+          key: "amount",
+        },
+        {
+          title: "Customer",
+          key: "givenToName",
+        },
+        {
+          title: "Method",
+          key: "method",
         },
         {
           title: "Order Date",

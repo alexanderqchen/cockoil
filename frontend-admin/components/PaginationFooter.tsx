@@ -6,11 +6,15 @@ import LoadingCircle from "@/components/LoadingCircle";
 import Link from "next/link";
 
 const PaginationFooter = ({
+  pathname,
+  itemName,
   numColumns,
   page,
   pageSize,
   count,
 }: {
+  pathname: string;
+  itemName: string;
   page: number;
   numColumns: number;
   pageSize: number;
@@ -32,11 +36,11 @@ const PaginationFooter = ({
           <div className="flex items-center justify-end">
             {loading && <LoadingCircle />}
             <p>
-              {startNumber}-{endNumber} of {count} Orders
+              {startNumber}-{endNumber} of {count} {itemName}
             </p>
             <Link
               href={{
-                pathname: "/orders",
+                pathname,
                 query: {
                   page: page - 1,
                 },
@@ -53,7 +57,7 @@ const PaginationFooter = ({
             </div>
             <Link
               href={{
-                pathname: "/orders",
+                pathname,
                 query: {
                   page: page + 1,
                 },

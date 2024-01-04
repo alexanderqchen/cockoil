@@ -1,34 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { keyBy } from "lodash";
+import { useState } from "react";
 import { CheckIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
-import type { Order } from "@/api";
-import productList from "@/constants/products.json";
-import { updateOrder } from "@/api";
+import type { Payout } from "@/api";
+import { updatePayout } from "@/api";
 
-const products = keyBy(productList, "id");
-
-const OrderCard = ({ order, visible }: { order: Order; visible: boolean }) => {
+const PayoutCard = ({
+  payout,
+  visible,
+}: {
+  payout: Payout;
+  visible: boolean;
+}) => {
   const [done, setDone] = useState(false);
 
   const markAsDone = async () => {
-    await updateOrder(order.id, { status: "COMPLETED" });
+    await updatePayout(payout.id, { status: "PAID" });
     setDone(true);
   };
   const markAsNotDone = async () => {
-    await updateOrder(order.id, { status: "PENDING" });
+    await updatePayout(payout.id, { status: "UNPAID" });
     setDone(false);
   };
-
-  const itemCounts: { [id: string]: number } = {};
-  order.items.forEach((item) => {
-    if (!(item in itemCounts)) {
-      itemCounts[item] = 0;
-    }
-
-    itemCounts[item]++;
-  });
 
   return (
     <div
@@ -37,11 +30,8 @@ const OrderCard = ({ order, visible }: { order: Order; visible: boolean }) => {
       } bg-white grow rounded-3xl shadow-lg p-12 text-black text-lg relative`}
     >
       <h1 className="text-3xl font-medium mb-4 mr-8 inline-block">
-        Order {order.id}
+        Payout {payout.id}
       </h1>
-      <p className="mb-4 inline-block">
-        <span className="font-medium">Shopify ID:</span> {order.shopifyOrderId}
-      </p>
       {done ? (
         <div className="group absolute top-4 right-8 w-auto">
           <button className="group-hover:hidden text-green-600 flex items-center gap-2">
@@ -64,15 +54,8 @@ const OrderCard = ({ order, visible }: { order: Order; visible: boolean }) => {
           Mark as done
         </button>
       )}
-
-      <h2 className="font-bold">Items</h2>
-      {Object.keys(itemCounts).map((itemId) => (
-        <p key={itemId}>
-          {itemCounts[itemId]} x {products[itemId].title}
-        </p>
-      ))}
     </div>
   );
 };
 
-export default OrderCard;
+export default PayoutCard;

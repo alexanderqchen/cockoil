@@ -47,6 +47,8 @@ const Orders = async ({ searchParams }: Props) => {
       )}
 
       <Table
+        pathname="/orders"
+        itemName="Orders"
         page={pageInt}
         pageSize={PAGE_SIZE}
         count={count}

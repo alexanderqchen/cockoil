@@ -1,12 +1,8 @@
 import Link from "next/link";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import CardSlider from "@/components/CardSlider";
-import { getOrders } from "@/api";
+import SkeletonCardSlider from "@/components/SkeletonCardSlider";
 
-const ProcessOrders = async () => {
-  const { count, data: descOrders } = await getOrders({ status: "PENDING" });
-  const orders = descOrders.reverse();
-
+const Loading = async () => {
   return (
     <div className="text-gray-500 bg-slate-100 w-screen h-screen flex flex-col justify-between">
       <div className="flex justify-between p-4 pb-12">
@@ -16,9 +12,9 @@ const ProcessOrders = async () => {
         </Link>
       </div>
 
-      <CardSlider type="ORDER" orders={orders} count={count} />
+      <SkeletonCardSlider itemName="Orders" />
     </div>
   );
 };
 
-export default ProcessOrders;
+export default Loading;

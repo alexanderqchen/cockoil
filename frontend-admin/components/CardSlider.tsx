@@ -2,10 +2,21 @@
 
 import { useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import type { Order, Payout } from "@/api";
 import OrderCard from "@/components/OrderCard";
-import type { Order } from "@/api";
+import PayoutCard from "@/components/PayoutCard";
 
-const CardSlider = ({ orders, count }: { orders: Order[]; count: number }) => {
+const CardSlider = ({
+  type,
+  orders,
+  payouts,
+  count,
+}: {
+  type: string;
+  orders?: Order[];
+  payouts?: Payout[];
+  count: number;
+}) => {
   const [cardIndex, setCardIndex] = useState(0);
 
   return (
@@ -20,9 +31,20 @@ const CardSlider = ({ orders, count }: { orders: Order[]; count: number }) => {
           <ChevronLeftIcon className="h-12 w-12" />
         </button>
 
-        {orders.map((order, i) => (
-          <OrderCard key={order.id} order={order} display={i === cardIndex} />
-        ))}
+        {type === "ORDER" &&
+          orders &&
+          orders.map((order, i) => (
+            <OrderCard key={order.id} order={order} visible={i === cardIndex} />
+          ))}
+        {type === "PAYOUT" &&
+          payouts &&
+          payouts.map((payout, i) => (
+            <PayoutCard
+              key={payout.id}
+              payout={payout}
+              visible={i === cardIndex}
+            />
+          ))}
 
         <button
           onClick={() => setCardIndex((prev) => Math.min(prev + 1, count - 1))}
@@ -34,7 +56,7 @@ const CardSlider = ({ orders, count }: { orders: Order[]; count: number }) => {
         </button>
       </div>
       <p className="text-lg text-center p-12">
-        {cardIndex + 1} of {count} Orders
+        {cardIndex + 1} of {count} {type === "ORDER" ? "Orders" : "Payouts"}
       </p>
     </>
   );
