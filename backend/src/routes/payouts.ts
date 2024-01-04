@@ -1,6 +1,6 @@
 import express from "express";
 import Joi from "joi";
-import { PrismaClient, OrderStatus } from "@prisma/client";
+import { PrismaClient, PayoutStatus } from "@prisma/client";
 
 export const router = express.Router();
 const prisma = new PrismaClient();
@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
     offset: Joi.number().integer().min(0),
     status: Joi.string()
       .uppercase()
-      .valid(...Object.keys(OrderStatus)),
+      .valid(...Object.keys(PayoutStatus)),
   });
 
   const { error: queryError, value: query } = querySchema.validate(req.query);
@@ -35,25 +35,25 @@ router.get("/", async (req, res) => {
     where,
   };
 
-  const [count, orders] = await prisma.$transaction([
-    prisma.order.count({ where }),
-    prisma.order.findMany(prismaOptions),
+  const [count, payouts] = await prisma.$transaction([
+    prisma.payout.count({ where }),
+    prisma.payout.findMany(prismaOptions),
   ]);
 
   return res.status(200).json({
     count,
-    data: orders,
+    data: payouts,
   });
 });
 
-router.patch("/:orderId", async (req, res) => {
+router.patch("/:payoutId", async (req, res) => {
   const paramsSchema = Joi.object({
-    orderId: Joi.number().integer().min(1),
+    payoutId: Joi.number().integer().min(1),
   });
   const bodySchema = Joi.object({
     status: Joi.string()
       .uppercase()
-      .valid(...Object.keys(OrderStatus)),
+      .valid(...Object.keys(PayoutStatus)),
   });
 
   const { error: paramsError, value: params } = paramsSchema.validate(
@@ -65,17 +65,17 @@ router.patch("/:orderId", async (req, res) => {
     return res.status(400).json({ error: { paramsError, bodyError } });
   }
 
-  const { orderId } = params;
+  const { payoutId } = params;
   const { status } = body;
 
-  const order = await prisma.order.update({
+  const payout = await prisma.payout.update({
     where: {
-      id: orderId,
+      id: payoutId,
     },
     data: {
       status,
     },
   });
 
-  return res.status(200).json(order);
+  return res.status(200).json(payout);
 });
