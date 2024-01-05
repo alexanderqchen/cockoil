@@ -1,10 +1,22 @@
 import { fetchAPI } from "@/api";
 import type { PaginatedReponse } from "@/api";
 
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  referredById?: number;
+  payoutMethod?: string;
+  payoutUsername?: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type Payout = {
   id: number;
   amount: number;
   givenToId: number;
+  givenTo: User;
   status: string;
   createdAt: string;
   updatedAt: string;

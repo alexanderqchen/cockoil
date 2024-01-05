@@ -1,9 +1,9 @@
 import express from "express";
 import Joi from "joi";
-import { PrismaClient, OrderStatus } from "@prisma/client";
+import { OrderStatus } from "@prisma/client";
+import prisma from "../helpers/prisma";
 
 export const router = express.Router();
-const prisma = new PrismaClient();
 
 router.get("/", async (req, res) => {
   const querySchema = Joi.object({

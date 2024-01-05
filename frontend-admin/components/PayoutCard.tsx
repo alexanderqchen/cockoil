@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CheckIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import type { Payout } from "@/api";
 import { updatePayout } from "@/api";
+import { formatDollars } from "@/helpers";
 
 const PayoutCard = ({
   payout,
@@ -54,6 +55,31 @@ const PayoutCard = ({
           Mark as done
         </button>
       )}
+      <div className="text-2xl leading-10">
+        <div className="mb-4">
+          <h2 className="font-bold">Payout Info</h2>
+          <p>
+            <span className="font-medium">Method:</span>{" "}
+            {payout.givenTo.payoutMethod}
+          </p>
+          <p>
+            <span className="font-medium">Username:</span>{" "}
+            {payout.givenTo.payoutUsername}
+          </p>
+          <p>
+            <span className="font-medium">Amount:</span>{" "}
+            {formatDollars(payout.amount)}
+          </p>
+        </div>
+
+        <h2 className="font-bold">Customer Info</h2>
+        <p>
+          <span className="font-medium">Name:</span> {payout.givenTo.name}
+        </p>
+        <p>
+          <span className="font-medium">Email:</span> {payout.givenTo.email}
+        </p>
+      </div>
     </div>
   );
 };

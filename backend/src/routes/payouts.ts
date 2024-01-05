@@ -1,9 +1,9 @@
 import express from "express";
 import Joi from "joi";
-import { PrismaClient, PayoutStatus } from "@prisma/client";
+import { PayoutStatus } from "@prisma/client";
+import prisma from "../helpers/prisma";
 
 export const router = express.Router();
-const prisma = new PrismaClient();
 
 router.get("/", async (req, res) => {
   const querySchema = Joi.object({
@@ -33,12 +33,17 @@ router.get("/", async (req, res) => {
       },
     ] as any,
     where,
+    include: {
+      givenTo: true,
+    },
   };
 
   const [count, payouts] = await prisma.$transaction([
     prisma.payout.count({ where }),
     prisma.payout.findMany(prismaOptions),
   ]);
+
+  console.log("payouts", payouts);
 
   return res.status(200).json({
     count,

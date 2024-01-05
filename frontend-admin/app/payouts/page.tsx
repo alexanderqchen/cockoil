@@ -21,6 +21,8 @@ const Payouts = async ({ searchParams }: Props) => {
 
   const formattedPayouts = payouts.map((payout) => ({
     ...payout,
+    customerName: payout.givenTo.name,
+    payoutMethod: payout.givenTo.payoutMethod,
     createdAt: formatDate(payout.createdAt),
     updatedAt: formatDate(payout.updatedAt),
   }));
@@ -67,11 +69,11 @@ const Payouts = async ({ searchParams }: Props) => {
           },
           {
             title: "Customer",
-            key: "givenToName",
+            key: "customerName",
           },
           {
             title: "Method",
-            key: "method",
+            key: "payoutMethod",
           },
           {
             title: "Order Date",
