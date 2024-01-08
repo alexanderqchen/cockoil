@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowUpTrayIcon } from "@heroicons/react/24/outline";
+import { ArrowUpTrayIcon, ClipboardIcon } from "@heroicons/react/24/outline";
+
 import Toast from "./Toast";
 
 const ShareButton = ({ url }: { url: string }) => {
@@ -20,7 +21,10 @@ const ShareButton = ({ url }: { url: string }) => {
         <ArrowUpTrayIcon className="size-6" />
         <p>Share with Friends</p>
       </button>
-      <Toast text="Copied to clipboard" visible={showToast} />
+      <Toast visible={showToast}>
+        <ClipboardIcon className="size-6" />
+        Copied to clipboard{" "}
+      </Toast>
     </>
   );
 };

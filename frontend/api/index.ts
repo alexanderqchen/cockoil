@@ -31,9 +31,11 @@ export type PaginatedReponse<T> = {
 import type { Order } from "./orders";
 import { getOrders, updateOrder } from "./orders";
 import type { Payout } from "./payouts";
-import { getPayouts, updatePayout } from "./payouts";
+import { getPayouts, getUserPayouts, updatePayout } from "./payouts";
 import type { User } from "./users";
-import { getUser } from "./users";
+import { getUser, updateUser } from "./users";
+import type { Reward } from "./rewards";
+import { getUserRewards } from "./rewards";
 
 export {
   Order,
@@ -41,7 +43,11 @@ export {
   updateOrder,
   Payout,
   getPayouts,
+  getUserPayouts,
   updatePayout,
   User,
   getUser,
+  updateUser,
+  Reward,
+  getUserRewards,
 };

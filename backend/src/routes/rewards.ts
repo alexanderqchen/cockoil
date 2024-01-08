@@ -41,8 +41,6 @@ router.get("/", async (req, res) => {
     prisma.reward.findMany(prismaOptions),
   ]);
 
-  console.log("rewards", rewards);
-
   return res.status(200).json({
     count,
     data: rewards,

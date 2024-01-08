@@ -12,6 +12,7 @@ router.get("/", async (req, res) => {
     status: Joi.string()
       .uppercase()
       .valid(...Object.keys(PayoutStatus)),
+    givenToId: Joi.number().integer().min(1),
   });
 
   const { error: queryError, value: query } = querySchema.validate(req.query);
@@ -20,9 +21,10 @@ router.get("/", async (req, res) => {
     return res.status(400).json({ error: { queryError } });
   }
 
-  const { limit, offset, status } = query;
+  const { limit, offset, status, givenToId } = query;
   const where = {
     status,
+    givenToId,
   };
   const prismaOptions = {
     skip: offset,
@@ -42,8 +44,6 @@ router.get("/", async (req, res) => {
     prisma.payout.count({ where }),
     prisma.payout.findMany(prismaOptions),
   ]);
-
-  console.log("payouts", payouts);
 
   return res.status(200).json({
     count,

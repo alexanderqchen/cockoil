@@ -39,6 +39,17 @@ export const getPayouts = async ({
   return await response.json();
 };
 
+export const getUserPayouts = async (
+  userId: number
+): Promise<PaginatedReponse<Payout>> => {
+  const response = await fetchAPI("/payouts", {
+    status: "PAID",
+    givenToId: userId.toString(),
+  });
+
+  return await response.json();
+};
+
 export const updatePayout = async (
   id: number,
   { status }: { status?: string }

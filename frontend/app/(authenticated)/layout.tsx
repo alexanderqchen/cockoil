@@ -10,8 +10,6 @@ const AuthenticatedLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const firstPath = pathname.split("/")[1];
 
-  useEffect(() => setOpen(false), [firstPath]);
-
   return (
     <div>
       <div className="h-14 mx-4 flex justify-between items-center">
@@ -28,7 +26,7 @@ const AuthenticatedLayout = ({ children }: { children: React.ReactNode }) => {
       >
         <XMarkIcon className="size-8 m-4 mb-8" onClick={() => setOpen(false)} />
         <ul className="text-2xl">
-          <Link href="/profile">
+          <Link href="/profile" onClick={() => setOpen(false)}>
             <li
               className={`font-bold h-16 pl-12 flex items-center ${
                 firstPath === "profile" && "bg-[#432529]"
@@ -37,7 +35,7 @@ const AuthenticatedLayout = ({ children }: { children: React.ReactNode }) => {
               Profile
             </li>
           </Link>
-          <Link href="/rewards">
+          <Link href="/rewards" onClick={() => setOpen(false)}>
             <li
               className={`font-bold h-16 pl-12 flex items-center ${
                 firstPath === "rewards" && "bg-[#432529]"
@@ -46,7 +44,7 @@ const AuthenticatedLayout = ({ children }: { children: React.ReactNode }) => {
               Rewards
             </li>
           </Link>
-          <Link href="/settings">
+          <Link href="/settings" onClick={() => setOpen(false)}>
             <li
               className={`font-bold h-16 pl-12 flex items-center ${
                 firstPath === "settings" && "bg-[#432529]"
