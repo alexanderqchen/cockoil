@@ -50,13 +50,15 @@ model Reward {
 }
 
 model Payout {
-  id        Int          @id @default(autoincrement())
-  amount    Int
-  givenTo   User         @relation(fields: [givenToId], references: [id])
-  givenToId Int
-  status    PayoutStatus @default(UNPAID)
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  id             Int           @id @default(autoincrement())
+  amount         Int
+  givenTo        User          @relation(fields: [givenToId], references: [id])
+  givenToId      Int
+  status         PayoutStatus  @default(UNPAID)
+  payoutMethod   PayoutMethod?
+  payoutUsername String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
 enum OrderStatus {

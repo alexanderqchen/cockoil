@@ -9,7 +9,7 @@ const Toast = ({
 }) => {
   return (
     <div
-      className={`absolute -bottom-14 left-0 right-0 flex justify-around  ${
+      className={`fixed -bottom-14 left-0 right-0 flex justify-around  ${
         visible && "-translate-y-20"
       }  transition ease-in-out duration-200`}
     >

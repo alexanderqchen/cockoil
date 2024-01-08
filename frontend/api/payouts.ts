@@ -18,6 +18,8 @@ export type Payout = {
   givenToId: number;
   givenTo: User;
   status: string;
+  payoutMethod: string;
+  payoutUsername: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -45,17 +47,6 @@ export const getUserPayouts = async (
   const response = await fetchAPI("/payouts", {
     status: "PAID",
     givenToId: userId.toString(),
-  });
-
-  return await response.json();
-};
-
-export const updatePayout = async (
-  id: number,
-  { status }: { status?: string }
-) => {
-  const response = await fetchAPI(`/payouts/${id}`, {}, "PATCH", {
-    ...(status && { status }),
   });
 
   return await response.json();

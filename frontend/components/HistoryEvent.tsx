@@ -21,8 +21,8 @@ const Event = ({
 }) => (
   <div className="mb-2 flex gap-4">
     <div className=" shrink-0 relative flex justify-start items-center flex flex-col">
-      <div className="rounded-full bg-[#432529] border-[#EB5757] border-2 size-16 flex items-center justify-center mb-2 shrink-0">
-        <p className="text-2xl">{icon}</p>
+      <div className="rounded-full bg-[#432529] border-[#EB5757] border-2 size-12 flex items-center justify-center mb-2 shrink-0">
+        <p className="text-xl">{icon}</p>
       </div>
       {!hideLine && <div className="min-h-4 h-full w-[2px] bg-gray-400" />}
     </div>
@@ -84,7 +84,7 @@ const HistoryEvent = ({
       <Event
         date={formatDate(payout.updatedAt)}
         title={`You got paid ${formatDollars(payout.amount)}`}
-        description={`${payoutMonth} rewards sent through Venmo`}
+        description={`${payoutMonth} rewards sent through ${payout.payoutMethod} to ${payout.payoutUsername}`}
         icon="🏦"
         hideLine={hideLine}
       />
