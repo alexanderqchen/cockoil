@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { XCircleIcon } from "@heroicons/react/24/outline";
 import type { User } from "@/api";
-import { updateUser } from "@/api";
+import { updateUserAction as updateUser } from "@/app/actions";
 import Toast from "./Toast";
 import LoadingCircle from "./LoadingCircle";
 

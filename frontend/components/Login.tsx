@@ -6,6 +6,10 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import Cookies from "universal-cookie";
+import { navigateToProfile } from "@/app/actions";
+
+const cookies = new Cookies(null, { path: "/" });
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,6 +24,8 @@ const Login = () => {
       );
       const { user } = userCredential;
       const idToken = await user.getIdToken();
+      cookies.set("firebaseIdToken", idToken);
+      navigateToProfile();
     } catch (error) {
       console.log(error);
     }
@@ -34,6 +40,8 @@ const Login = () => {
       );
       const { user } = userCredential;
       const idToken = await user.getIdToken();
+      cookies.set("firebaseIdToken", idToken);
+      navigateToProfile();
     } catch (error) {
       console.log(error);
     }

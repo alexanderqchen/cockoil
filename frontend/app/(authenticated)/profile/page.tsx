@@ -7,7 +7,7 @@ const BASE_REFER_URL = "https://localhost:3001/refer/";
 
 const Profile = async () => {
   const { id, name } = await getUser(userId);
-  const referUrl = BASE_REFER_URL + "u" + userId;
+  const referUrl = BASE_REFER_URL + "u" + id;
 
   return (
     <div className="text-center">
