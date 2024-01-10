@@ -1,16 +1,5 @@
 import { fetchAPI } from "@/api";
-import type { PaginatedReponse } from "@/api";
-
-type User = {
-  id: number;
-  name: string;
-  email: string;
-  referredById?: number;
-  payoutMethod?: string;
-  payoutUsername?: string;
-  createdAt: string;
-  updatedAt: string;
-};
+import type { PaginatedReponse, User } from "@/api";
 
 export type Payout = {
   id: number;
@@ -42,11 +31,11 @@ export const getPayouts = async ({
 };
 
 export const getUserPayouts = async (
-  userId: number
+  userId: string
 ): Promise<PaginatedReponse<Payout>> => {
   const response = await fetchAPI("/payouts", {
     status: "PAID",
-    givenToId: userId.toString(),
+    givenToId: userId,
   });
 
   return await response.json();

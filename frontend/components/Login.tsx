@@ -6,10 +6,11 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import Cookies from "universal-cookie";
-import { navigateToProfile } from "@/app/actions";
-
-const cookies = new Cookies(null, { path: "/" });
+import {
+  createUserAction,
+  setAuthCookies,
+  navigateToProfile,
+} from "@/app/actions";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -22,9 +23,11 @@ const Login = () => {
         email,
         password
       );
-      const { user } = userCredential;
-      const idToken = await user.getIdToken();
-      cookies.set("firebaseIdToken", idToken);
+      const { user: firebaseUser } = userCredential;
+      const idToken = await firebaseUser.getIdToken();
+      await createUserAction(firebaseUser.uid, email);
+      await setAuthCookies(firebaseUser.uid, idToken);
+
       navigateToProfile();
     } catch (error) {
       console.log(error);
@@ -38,9 +41,10 @@ const Login = () => {
         email,
         password
       );
-      const { user } = userCredential;
-      const idToken = await user.getIdToken();
-      cookies.set("firebaseIdToken", idToken);
+      const { user: firebaseUser } = userCredential;
+      const idToken = await firebaseUser.getIdToken();
+      await setAuthCookies(firebaseUser.uid, idToken);
+
       navigateToProfile();
     } catch (error) {
       console.log(error);

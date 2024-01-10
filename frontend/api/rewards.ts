@@ -12,8 +12,8 @@ export type Reward = {
 };
 
 export const getUserRewards = async (
-  userId: number
+  userId: string
 ): Promise<PaginatedReponse<Reward>> => {
-  const response = await fetchAPI("/rewards", { givenToId: userId.toString() });
+  const response = await fetchAPI("/rewards", { givenToId: userId });
   return await response.json();
 };

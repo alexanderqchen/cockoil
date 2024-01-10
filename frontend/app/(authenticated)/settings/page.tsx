@@ -1,9 +1,9 @@
 import { getUser } from "@/api";
 import UserSettings from "@/components/UserSettings";
-
-const userId = 1;
+import { cookies } from "next/headers";
 
 const Settings = async () => {
+  const userId = cookies().get("firebaseUid")?.value || "";
   const user = await getUser(userId);
 
   return (

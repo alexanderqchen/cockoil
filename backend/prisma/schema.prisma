@@ -11,11 +11,11 @@ datasource db {
 }
 
 model User {
-  id             Int           @id @default(autoincrement())
-  name           String
+  id             String        @id
   email          String
-  referredById   Int?
+  name           String?
   referredBy     User?         @relation("UserReferrals", fields: [referredById], references: [id])
+  referredById   String?
   referredUsers  User[]        @relation("UserReferrals")
   payoutMethod   PayoutMethod?
   payoutUsername String?
@@ -31,7 +31,7 @@ model Order {
   shopifyOrderId String      @unique
   items          String[]
   referredBy     User?       @relation(fields: [referredById], references: [id])
-  referredById   Int?
+  referredById   String?
   status         OrderStatus @default(PENDING)
   rewards        Reward[]
   createdAt      DateTime    @default(now())
@@ -44,7 +44,7 @@ model Reward {
   createdFrom   Order    @relation(fields: [createdFromId], references: [id])
   createdFromId Int
   givenTo       User     @relation(fields: [givenToId], references: [id])
-  givenToId     Int
+  givenToId     String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
@@ -53,7 +53,7 @@ model Payout {
   id             Int           @id @default(autoincrement())
   amount         Int
   givenTo        User          @relation(fields: [givenToId], references: [id])
-  givenToId      Int
+  givenToId      String
   status         PayoutStatus  @default(UNPAID)
   payoutMethod   PayoutMethod?
   payoutUsername String?

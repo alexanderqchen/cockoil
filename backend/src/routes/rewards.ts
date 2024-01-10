@@ -1,7 +1,7 @@
 import express from "express";
 import Joi from "joi";
-import { PayoutStatus } from "@prisma/client";
 import prisma from "../helpers/prisma";
+import { isAdminUser } from "../helpers/auth";
 
 export const router = express.Router();
 
@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
   const querySchema = Joi.object({
     limit: Joi.number().integer().min(1),
     offset: Joi.number().integer().min(0),
-    givenToId: Joi.number().integer().min(1),
+    givenToId: Joi.string(),
   });
 
   const { error: queryError, value: query } = querySchema.validate(req.query);
@@ -19,6 +19,11 @@ router.get("/", async (req, res) => {
   }
 
   const { limit, offset, givenToId } = query;
+
+  if (res.locals.userId !== givenToId && !isAdminUser(res.locals.userId)) {
+    return res.status(401).json("Unauthorized");
+  }
+
   const where = {
     givenToId,
   };

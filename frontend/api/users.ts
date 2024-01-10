@@ -1,9 +1,9 @@
 import { fetchAPI } from "@/api";
 
 export type User = {
-  id: number;
-  name: string;
+  id: string;
   email: string;
+  name: string;
   referredById?: number;
   payoutMethod?: string;
   payoutUsername?: string;
@@ -11,13 +11,21 @@ export type User = {
   updatedAt: string;
 };
 
-export const getUser = async (userId: number): Promise<User> => {
+export const createUser = async (id: string, email: string) => {
+  const response = await fetchAPI("/users", {}, "POST", {
+    id,
+    email,
+  });
+  return await response.json();
+};
+
+export const getUser = async (userId: string): Promise<User> => {
   const response = await fetchAPI(`/users/${userId}`);
   return await response.json();
 };
 
 export const updateUser = async (
-  id: number,
+  id: string,
   {
     name,
     email,

@@ -8,10 +8,14 @@ import Toast from "./Toast";
 import LoadingCircle from "./LoadingCircle";
 
 const UserSettings = ({ user }: { user: User }) => {
-  const [name, setName] = useState(user.name);
+  const [name, setName] = useState(user.name || "");
   const [email, setEmail] = useState(user.email);
-  const [payoutMethod, setPayoutMethod] = useState(user.payoutMethod);
-  const [payoutUsername, setPayoutUsername] = useState(user.payoutUsername);
+  const [payoutMethod, setPayoutMethod] = useState(
+    user.payoutMethod || "PAYPAL"
+  );
+  const [payoutUsername, setPayoutUsername] = useState(
+    user.payoutUsername || ""
+  );
   const [showToast, setShowToast] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showErrorToast, setShowErrorToast] = useState(false);

@@ -2,8 +2,7 @@ import { getUserPayouts, getUserRewards } from "@/api";
 import type { Payout, Reward } from "@/api";
 import { formatDollars } from "@/helpers";
 import HistoryEvent from "@/components/HistoryEvent";
-
-const userId = 1;
+import { cookies } from "next/headers";
 
 export type HistoryItem = {
   type: "PAYOUT" | "REWARD";
@@ -77,6 +76,7 @@ const combineHistoryItems = (
 };
 
 const Rewards = async () => {
+  const userId = cookies().get("firebaseUid")?.value || "";
   const { data: payouts } = await getUserPayouts(userId);
   const { data: rewards } = await getUserRewards(userId);
 

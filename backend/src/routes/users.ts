@@ -2,21 +2,52 @@ import express from "express";
 import Joi from "joi";
 import { PayoutMethod } from "@prisma/client";
 import prisma from "../helpers/prisma";
+import { checkAuthorization, isAdminUser } from "../helpers/auth";
 
 export const router = express.Router();
 
-router.get("/:userId", async (req, res) => {
-  const paramsSchema = Joi.object({
-    userId: Joi.number().integer().min(1),
+router.post("", async (req, res) => {
+  const bodySchema = Joi.object({
+    id: Joi.string(),
+    email: Joi.string().email(),
   });
+
+  const { error: bodyError, value: body } = bodySchema.validate(req.body);
+
+  if (bodyError) {
+    return res.status(400).json({ error: { bodyError } });
+  }
+
+  const { id, email } = body;
+
+  const user = await prisma.user.create({
+    data: {
+      id,
+      email,
+    },
+  });
+
+  return res.status(200).json(user);
+});
+
+router.get("/:userId", checkAuthorization, async (req, res) => {
+  const paramsSchema = Joi.object({
+    userId: Joi.string(),
+  });
+
   const { error: paramsError, value: params } = paramsSchema.validate(
     req.params
   );
+
   if (paramsError) {
     return res.status(400).json({ error: { paramsError } });
   }
 
   const { userId } = params;
+
+  if (res.locals.userId !== userId && !isAdminUser(res.locals.userId)) {
+    return res.status(401).json("Unauthorized");
+  }
 
   const user = await prisma.user.findUnique({
     where: {
@@ -27,9 +58,9 @@ router.get("/:userId", async (req, res) => {
   return res.status(200).json(user);
 });
 
-router.patch("/:userId", async (req, res) => {
+router.patch("/:userId", checkAuthorization, async (req, res) => {
   const paramsSchema = Joi.object({
-    userId: Joi.number().integer().min(1),
+    userId: Joi.string(),
   });
   const bodySchema = Joi.object({
     name: Joi.string(),
@@ -50,6 +81,11 @@ router.patch("/:userId", async (req, res) => {
   }
 
   const { userId } = params;
+
+  if (res.locals.userId !== userId && !isAdminUser(res.locals.userId)) {
+    return res.status(401).json("Unauthorized");
+  }
+
   const { name, email, payoutMethod, payoutUsername } = body;
 
   const user = await prisma.user.update({
