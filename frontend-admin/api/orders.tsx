@@ -8,6 +8,13 @@ export type Order = {
   createdAt: string;
   updatedAt: string;
   items: string[];
+  shippingName: string;
+  shippingAddress1: string;
+  shippingAddress2: string;
+  shippingCity: string;
+  shippingState: string;
+  shippingZip: string;
+  shippingPhone: string;
 };
 
 export const getOrders = async ({

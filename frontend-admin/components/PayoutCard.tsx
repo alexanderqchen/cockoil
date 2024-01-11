@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { CheckIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import type { Payout } from "@/api";
-import { updatePayout } from "@/api";
+import { updatePayoutAction as updatePayout } from "@/app/actions";
 import { formatDollars } from "@/helpers";
 
 const PayoutCard = ({

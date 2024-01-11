@@ -66,6 +66,10 @@ const Orders = async ({ searchParams }: Props) => {
             key: "shopifyOrderId",
           },
           {
+            title: "Customer",
+            key: "shippingName",
+          },
+          {
             title: "Order Date",
             key: "createdAt",
           },

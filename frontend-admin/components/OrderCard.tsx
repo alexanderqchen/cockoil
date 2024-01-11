@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { keyBy } from "lodash";
 import { CheckIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import type { Order } from "@/api";
 import productList from "@/constants/products.json";
-import { updateOrder } from "@/api";
+import { updateOrderAction as updateOrder } from "@/app/actions";
 
 const products = keyBy(productList, "id");
 
@@ -34,13 +34,20 @@ const OrderCard = ({ order, visible }: { order: Order; visible: boolean }) => {
     <div
       className={`${
         !visible && "hidden"
-      } bg-white grow rounded-3xl shadow-lg p-12 text-black text-lg relative`}
+      } bg-white grow rounded-3xl shadow-lg p-12 text-black text-2xl relative`}
     >
       <h1 className="text-3xl font-medium mb-4 mr-8 inline-block">
         Order {order.id}
       </h1>
-      <p className="mb-4 inline-block">
-        <span className="font-medium">Shopify ID:</span> {order.shopifyOrderId}
+      <p className="mb-4 inline-block text-lg">
+        <span className="font-medium">Shopify ID:</span>{" "}
+        <a
+          href={`https://admin.shopify.com/store/cockoil/orders?query=${order.shopifyOrderId}`}
+          className="text-blue-600 underline"
+          target="_blank"
+        >
+          {order.shopifyOrderId}
+        </a>
       </p>
       {done ? (
         <div className="group absolute top-4 right-8 w-auto">
@@ -65,12 +72,25 @@ const OrderCard = ({ order, visible }: { order: Order; visible: boolean }) => {
         </button>
       )}
 
-      <h2 className="font-bold">Items</h2>
-      {Object.keys(itemCounts).map((itemId) => (
-        <p key={itemId}>
-          {itemCounts[itemId]} x {products[itemId].title}
+      <div className="mb-4">
+        <h2 className="font-bold">Items</h2>
+        {Object.keys(itemCounts).map((itemId) => (
+          <p key={itemId}>
+            {itemCounts[itemId]} x {products[itemId].title}
+          </p>
+        ))}
+      </div>
+
+      <div className="mb-4">
+        <h2 className="font-bold">Shipping Info</h2>
+        <p>{order.shippingName}</p>
+        <p>{order.shippingAddress1}</p>
+        <p>{order.shippingAddress2}</p>
+        <p>
+          {order.shippingCity}, {order.shippingState} {order.shippingZip}
         </p>
-      ))}
+        <p>{order.shippingPhone}</p>
+      </div>
     </div>
   );
 };

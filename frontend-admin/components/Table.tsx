@@ -86,7 +86,17 @@ const Table = ({
             >
               {columns.map(({ key }) => (
                 <td className="px-6 py-4" key={item.id + key}>
-                  {item[key]}
+                  {key === "shopifyOrderId" ? (
+                    <a
+                      href={`https://admin.shopify.com/store/cockoil/orders?query=${item[key]}`}
+                      className="text-blue-600 underline"
+                      target="_blank"
+                    >
+                      {item[key]}
+                    </a>
+                  ) : (
+                    item[key]
+                  )}
                 </td>
               ))}
             </tr>

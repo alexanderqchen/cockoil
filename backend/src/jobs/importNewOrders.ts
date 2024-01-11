@@ -11,8 +11,15 @@ import productList from "../constants/products.json";
 
 type OrderData = {
   shopifyOrderId: string;
-  referredById: number | undefined;
+  referredById: string | undefined;
   items: string[];
+  shippingName: string;
+  shippingAddress1: string;
+  shippingAddress2: string;
+  shippingCity: string;
+  shippingState: string;
+  shippingZip: string;
+  shippingPhone: string;
 };
 
 const prisma = new PrismaClient();
@@ -116,8 +123,6 @@ const createRewardsForOrder = async (
 
   const rewards = [];
 
-  console.log();
-
   while (referredById) {
     const user = await prisma.user.findUnique({
       where: {
@@ -171,6 +176,13 @@ const run = async () => {
       items: shopifyOrder.line_items.map(
         ({ product_id }: { product_id: number }) => product_id.toString()
       ),
+      shippingName: shopifyOrder.shipping_address?.name,
+      shippingAddress1: shopifyOrder.shipping_address?.address1,
+      shippingAddress2: shopifyOrder.shipping_address?.address2,
+      shippingCity: shopifyOrder.shipping_address?.city,
+      shippingState: shopifyOrder.shipping_address?.province_code,
+      shippingZip: shopifyOrder.shipping_address?.zip,
+      shippingPhone: shopifyOrder.shipping_address?.phone,
     };
 
     const rewards = await createRewardsForOrder(orderData, prisma);

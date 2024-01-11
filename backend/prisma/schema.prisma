@@ -34,8 +34,17 @@ model Order {
   referredById   String?
   status         OrderStatus @default(PENDING)
   rewards        Reward[]
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+
+  shippingName     String?
+  shippingAddress1 String?
+  shippingAddress2 String?
+  shippingCity     String?
+  shippingState    String?
+  shippingZip      String?
+  shippingPhone    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Reward {
