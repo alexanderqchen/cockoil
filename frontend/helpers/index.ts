@@ -7,3 +7,7 @@ export const formatDate = (dateString: string): string =>
 
 export const formatDollars = (cents: number) =>
   `$${(Math.round(cents) / 100).toFixed(2)}`;
+
+export const formatUserUrl = (userId: string) => {
+  return "https://admin.cockoil.com/refer/u" + userId;
+};

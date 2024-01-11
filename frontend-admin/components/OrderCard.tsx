@@ -6,6 +6,7 @@ import { CheckIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import type { Order } from "@/api";
 import productList from "@/constants/products.json";
 import { updateOrderAction as updateOrder } from "@/app/actions";
+import ScanItems from "@/components/ScanItems";
 
 const products = keyBy(productList, "id");
 
@@ -22,6 +23,7 @@ const OrderCard = ({ order, visible }: { order: Order; visible: boolean }) => {
   };
 
   const itemCounts: { [id: string]: number } = {};
+
   order.items.forEach((item) => {
     if (!(item in itemCounts)) {
       itemCounts[item] = 0;
@@ -72,24 +74,31 @@ const OrderCard = ({ order, visible }: { order: Order; visible: boolean }) => {
         </button>
       )}
 
-      <div className="mb-4">
-        <h2 className="font-bold">Items</h2>
-        {Object.keys(itemCounts).map((itemId) => (
-          <p key={itemId}>
-            {itemCounts[itemId]} x {products[itemId].title}
-          </p>
-        ))}
-      </div>
+      <div className="flex gap-8">
+        <div className="w-1/2">
+          <ScanItems totalItemCount={order.items.length} />
+        </div>
+        <div className="w-1/2 bg-slate-100 p-8 rounded-3xl">
+          <div className="mb-8">
+            <h2 className="font-bold mb-2">Items</h2>
+            {Object.keys(itemCounts).map((itemId) => (
+              <p key={itemId}>
+                {itemCounts[itemId]} x {products[itemId].title}
+              </p>
+            ))}
+          </div>
 
-      <div className="mb-4">
-        <h2 className="font-bold">Shipping Info</h2>
-        <p>{order.shippingName}</p>
-        <p>{order.shippingAddress1}</p>
-        <p>{order.shippingAddress2}</p>
-        <p>
-          {order.shippingCity}, {order.shippingState} {order.shippingZip}
-        </p>
-        <p>{order.shippingPhone}</p>
+          <div className="mb-8">
+            <h2 className="font-bold mb-2">Shipping Info</h2>
+            <p>{order.shippingName}</p>
+            <p>{order.shippingAddress1}</p>
+            <p>{order.shippingAddress2}</p>
+            <p>
+              {order.shippingCity}, {order.shippingState} {order.shippingZip}
+            </p>
+            <p>{order.shippingPhone}</p>
+          </div>
+        </div>
       </div>
     </div>
   );

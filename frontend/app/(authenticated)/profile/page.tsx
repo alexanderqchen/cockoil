@@ -2,14 +2,13 @@ import { getUser } from "@/api";
 import QRCode from "react-qr-code";
 import ShareButton from "@/components/ShareButton";
 import { cookies } from "next/headers";
-
-const BASE_REFER_URL = "https://localhost:3001/refer/";
+import { formatUserUrl } from "@/helpers";
 
 const Profile = async () => {
-  const userId = cookies().get("firebaseUid")?.value || "";
-  const { id, name } = await getUser(userId);
+  const firebaseUid = cookies().get("firebaseUid")?.value || "";
+  const { id, name } = await getUser(firebaseUid);
 
-  const referUrl = BASE_REFER_URL + "u" + id;
+  const referUrl = formatUserUrl(id);
 
   return (
     <div className="text-center">
