@@ -1,5 +1,9 @@
-import { redirect } from "next/navigation";
+import Login from "@/components/Login";
 
 export default async function Home() {
-  return <div>Home Page</div>;
+  return (
+    <div className="w-screen h-screen text-center flex items-center justify-center">
+      <Login />
+    </div>
+  );
 }

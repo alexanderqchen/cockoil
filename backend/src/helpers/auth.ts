@@ -10,7 +10,7 @@ const app = initializeApp({
 export const auth = getAuth(app);
 
 export const isAdminUser = (userId: string) => {
-  const adminWhitelist = ["Z20PAl4io4QQqbDO5OUApnGmtKd2"];
+  const adminWhitelist = ["uROkkEChdQXVBmzDKx6aApKRwZS2"];
   return adminWhitelist.includes(userId);
 };
 
