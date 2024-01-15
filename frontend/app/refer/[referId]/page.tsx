@@ -21,8 +21,6 @@ const ReferPage = async ({
   }
 
   redirect(SHOPIFY_URL + discountCode);
-
-  return null;
 };
 
 export default ReferPage;
