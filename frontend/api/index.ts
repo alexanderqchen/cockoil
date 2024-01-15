@@ -70,7 +70,7 @@ export type Order = {
 import type { Payout } from "./payouts";
 import { getPayouts, getUserPayouts } from "./payouts";
 import type { User } from "./users";
-import { createUser, getUser, updateUser } from "./users";
+import { createUser, getUser, getUserIdFromItemId, updateUser } from "./users";
 import type { Reward } from "./rewards";
 import { getUserRewards } from "./rewards";
 
@@ -81,6 +81,7 @@ export {
   User,
   createUser,
   getUser,
+  getUserIdFromItemId,
   updateUser,
   Reward,
   getUserRewards,

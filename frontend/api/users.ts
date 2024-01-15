@@ -24,6 +24,14 @@ export const getUser = async (userId: string): Promise<User> => {
   return response;
 };
 
+export const getUserIdFromItemId = async (
+  itemId: string
+): Promise<{ userId: string }> => {
+  const response = await fetchAPI(`/userIdFromItemId/${itemId}`);
+
+  return response;
+};
+
 export const updateUser = async (
   id: string,
   {
