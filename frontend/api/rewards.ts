@@ -15,5 +15,5 @@ export const getUserRewards = async (
   userId: string
 ): Promise<PaginatedReponse<Reward>> => {
   const response = await fetchAPI("/rewards", { givenToId: userId });
-  return await response.json();
+  return response;
 };

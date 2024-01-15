@@ -12,6 +12,11 @@ export const setAuthCookies = async (
   cookies().set("firebaseIdToken", firebaseIdToken, { secure: true });
 };
 
+export const clearAuthCookies = async () => {
+  cookies().delete("firebaseIdToken");
+  cookies().delete("firebaseUid");
+};
+
 export const navigateToOrders = async () => {
   redirect("/orders");
 };

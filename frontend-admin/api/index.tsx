@@ -1,5 +1,7 @@
 import { isEmpty } from "lodash";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { clearAuthCookies } from "@/app/actions";
 
 const API_ENDPOINT = "http://localhost:3001";
 
@@ -11,7 +13,7 @@ export const fetchAPI = async (
 ) => {
   const idToken = cookies().get("firebaseIdToken")?.value;
 
-  return await fetch(
+  const response = await fetch(
     API_ENDPOINT +
       path +
       (!isEmpty(params) ? "?" : "") +
@@ -26,6 +28,14 @@ export const fetchAPI = async (
       ...(body && { body: JSON.stringify(body) }),
     }
   );
+  const responseJson = await response.json();
+
+  if (responseJson.error?.authError) {
+    clearAuthCookies();
+    return redirect(`/?toast=${responseJson.error.authError}`);
+  }
+
+  return responseJson;
 };
 
 export type PaginatedReponse<T> = {

@@ -27,8 +27,16 @@ export const checkAuthorization: RequestHandler = async (req, res, next) => {
     } else {
       return res.status(401).json("Unauthorized");
     }
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
+    if (error?.errorInfo?.code === "auth/id-token-expired") {
+      return res.status(401).json({
+        error: {
+          authError: "Session has expired, please login again.",
+        },
+      });
+    }
+
     return res.status(401).json("Unauthorized");
   }
 };

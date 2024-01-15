@@ -22,7 +22,7 @@ export type Order = {
 export const getOrder = async (orderId: number) => {
   const response = await fetchAPI(`/orders/${orderId}`);
 
-  return await response.json();
+  return response;
 };
 
 export const getOrders = async ({
@@ -39,7 +39,7 @@ export const getOrders = async ({
     ...(page && pageSize && { offset: `${(page - 1) * pageSize}` }),
     ...(status && { status }),
   });
-  return await response.json();
+  return response;
 };
 
 export const updateOrder = async (
@@ -51,5 +51,5 @@ export const updateOrder = async (
     ...(internalItemIds && { internalItemIds }),
   });
 
-  return await response.json();
+  return response;
 };

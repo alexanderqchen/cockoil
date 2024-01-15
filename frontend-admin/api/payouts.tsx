@@ -36,7 +36,7 @@ export const getPayouts = async ({
     ...(page && pageSize && { offset: `${(page - 1) * pageSize}` }),
     ...(status && { status }),
   });
-  return await response.json();
+  return response;
 };
 
 export const updatePayout = async (
@@ -47,5 +47,5 @@ export const updatePayout = async (
     ...(status && { status }),
   });
 
-  return await response.json();
+  return response;
 };

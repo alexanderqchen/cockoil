@@ -16,12 +16,12 @@ export const createUser = async (id: string, email: string) => {
     id,
     email,
   });
-  return await response.json();
+  return response;
 };
 
 export const getUser = async (userId: string): Promise<User> => {
   const response = await fetchAPI(`/users/${userId}`);
-  return await response.json();
+  return response;
 };
 
 export const updateUser = async (
@@ -45,5 +45,5 @@ export const updateUser = async (
     ...(payoutUsername && { payoutUsername }),
   });
 
-  return await response.json();
+  return response;
 };
