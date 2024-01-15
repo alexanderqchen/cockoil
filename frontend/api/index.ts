@@ -33,6 +33,29 @@ export type PaginatedReponse<T> = {
   data: T[];
 };
 
+export type Item = {
+  id: string;
+  createdFromId: number;
+  registeredById: string;
+};
+
+export type Order = {
+  id: number;
+  shopifyOrderId: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  shopifyItems: string[];
+  internalItems: Item[];
+  shippingName: string;
+  shippingAddress1: string;
+  shippingAddress2: string;
+  shippingCity: string;
+  shippingState: string;
+  shippingZip: string;
+  shippingPhone: string;
+};
+
 import type { Payout } from "./payouts";
 import { getPayouts, getUserPayouts } from "./payouts";
 import type { User } from "./users";

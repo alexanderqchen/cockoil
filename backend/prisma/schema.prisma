@@ -30,7 +30,7 @@ model User {
 model Order {
   id             Int         @id @default(autoincrement())
   shopifyOrderId String      @unique
-  items          String[]
+  shopifyItems   String[]
   referredBy     User?       @relation(fields: [referredById], references: [id])
   referredById   String?
   status         OrderStatus @default(PENDING)
@@ -44,9 +44,9 @@ model Order {
   shippingZip      String?
   shippingPhone    String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Item      Item[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  internalItems Item[]
 }
 
 model Item {

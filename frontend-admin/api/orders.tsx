@@ -1,5 +1,6 @@
 import { fetchAPI } from "@/api";
 import type { PaginatedReponse } from "@/api";
+import type { Item } from "@/api";
 
 export type Order = {
   id: number;
@@ -7,7 +8,8 @@ export type Order = {
   status: string;
   createdAt: string;
   updatedAt: string;
-  items: string[];
+  shopifyItems: string[];
+  internalItems: Item[];
   shippingName: string;
   shippingAddress1: string;
   shippingAddress2: string;
@@ -15,6 +17,12 @@ export type Order = {
   shippingState: string;
   shippingZip: string;
   shippingPhone: string;
+};
+
+export const getOrder = async (orderId: number) => {
+  const response = await fetchAPI(`/orders/${orderId}`);
+
+  return await response.json();
 };
 
 export const getOrders = async ({
@@ -36,10 +44,11 @@ export const getOrders = async ({
 
 export const updateOrder = async (
   id: number,
-  { status }: { status?: string }
+  { status, internalItemIds }: { status?: string; internalItemIds?: string[] }
 ) => {
   const response = await fetchAPI(`/orders/${id}`, {}, "PATCH", {
     ...(status && { status }),
+    ...(internalItemIds && { internalItemIds }),
   });
 
   return await response.json();

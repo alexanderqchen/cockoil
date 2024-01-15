@@ -4,16 +4,34 @@ import { useState } from "react";
 import QRCode from "react-qr-code";
 import { getIdFromUrl, formatItemUrl } from "@/helpers";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { updateOrderAction as updateOrder } from "@/app/actions";
+import LoadingCircle from "@/components/LoadingCircle";
+import type { Item } from "@/api";
+import { isEqual } from "lodash";
+import { CheckCircleIcon } from "@heroicons/react/24/outline";
 
-const ScanItems = ({ totalItemCount }: { totalItemCount: number }) => {
-  // TODO: disable save button unless the item counts match
-  // TODO: create item objects when you click save
-  // TODO: show qrs with item on save
-  // TODO: allow reset items
-
+const ScanItems = ({
+  orderId,
+  internalItems,
+  updateInternalItems,
+  numQrRequired,
+}: {
+  numQrRequired: number;
+  orderId: number;
+  internalItems: Item[];
+  updateInternalItems: () => Promise<void>;
+}) => {
   const [scanAddInput, setScanAddInput] = useState("");
   const [scanRemoveInput, setScanRemoveInput] = useState("");
-  const [items, setItems] = useState([] as string[]);
+  const [items, setItems] = useState(internalItems.map(({ id }) => id));
+  const [loading, setLoading] = useState(false);
+
+  const itemsUpToDate = isEqual(
+    internalItems.map(({ id }) => id),
+    items
+  );
+  const buttonDisabled =
+    items.length !== numQrRequired || loading || itemsUpToDate;
 
   const addItem = (itemId: string) => {
     setItems((prev) => {
@@ -24,13 +42,33 @@ const ScanItems = ({ totalItemCount }: { totalItemCount: number }) => {
     });
     setScanAddInput("");
   };
+
   const removeItem = (itemId: string) => {
     setItems((prev) => {
       const newItems = [...prev];
       const index = newItems.indexOf(itemId);
-      return newItems.splice(index, 1);
+      if (index !== -1) {
+        newItems.splice(index, 1);
+      }
+      return newItems;
     });
     setScanRemoveInput("");
+  };
+
+  const handleSave = async (items: string[]) => {
+    setLoading(true);
+    try {
+      const response = await updateOrder(orderId, { internalItemIds: items });
+
+      if (!response.error) {
+        const order = await updateInternalItems();
+        setLoading(false);
+      } else {
+        throw response.error;
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -65,7 +103,7 @@ const ScanItems = ({ totalItemCount }: { totalItemCount: number }) => {
         onSubmit={async (e) => {
           e.preventDefault();
           try {
-            const itemId = getIdFromUrl(scanAddInput);
+            const itemId = getIdFromUrl(scanRemoveInput);
             removeItem(itemId);
           } catch (error) {
             console.log(error);
@@ -87,22 +125,35 @@ const ScanItems = ({ totalItemCount }: { totalItemCount: number }) => {
       <div>
         {items.map((itemId) => (
           <QRCode
-            className="w-1/5 h-auto inline-block mr-4 mb-4"
+            key={itemId}
+            className="w-12 h-auto inline-block mr-4 mb-4"
             value={formatItemUrl(itemId)}
           />
         ))}
       </div>
       <button
-        className={`w-full bg-blue-600 leading-10 py-1 text-white rounded-md mb-2 ${
-          items.length !== totalItemCount && "bg-slate-400 cursor-not-allowed"
+        onClick={() => handleSave(items)}
+        className={`w-full bg-blue-600 leading-10 py-1 text-white rounded-md mb-2 flex items-center justify-center gap-1 ${
+          buttonDisabled && "bg-slate-400 cursor-not-allowed"
         }`}
+        disabled={buttonDisabled}
       >
-        Save
+        {loading && <LoadingCircle />}
+        {itemsUpToDate ? (
+          <>
+            <CheckCircleIcon className="h-6 inline" />
+            Up to Date
+          </>
+        ) : (
+          "Save"
+        )}
       </button>
-      <p className="text-sm text-gray-600 flex items-center gap-1">
-        <InformationCircleIcon className="h-5 w-5" />
-        QR count must equal item count to save
-      </p>
+      {!itemsUpToDate && items.length !== numQrRequired && (
+        <p className="text-sm text-gray-600 flex items-center gap-1">
+          <InformationCircleIcon className="h-5 w-5" />
+          You must have {numQrRequired} QR code(s) to save
+        </p>
+      )}
     </>
   );
 };

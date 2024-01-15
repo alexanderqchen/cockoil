@@ -34,8 +34,16 @@ export type PaginatedReponse<T> = {
 };
 
 import type { Order } from "./orders";
-import { getOrders, updateOrder } from "./orders";
+import { getOrders, getOrder, updateOrder } from "./orders";
 import type { Payout } from "./payouts";
 import { getPayouts, updatePayout } from "./payouts";
 
-export { Order, getOrders, updateOrder, Payout, getPayouts, updatePayout };
+export {
+  Order,
+  getOrders,
+  getOrder,
+  updateOrder,
+  Payout,
+  getPayouts,
+  updatePayout,
+};

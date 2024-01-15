@@ -12,7 +12,7 @@ import productList from "../constants/products.json";
 type OrderData = {
   shopifyOrderId: string;
   referredById: string | undefined;
-  items: string[];
+  shopifyItems: string[];
   shippingName: string;
   shippingAddress1: string;
   shippingAddress2: string;
@@ -103,7 +103,7 @@ const createRewardsForOrder = async (
 ) => {
   let maximumDiscount = 0;
 
-  order.items.forEach((productId) => {
+  order.shopifyItems.forEach((productId) => {
     const productMaxDiscount = products[productId]?.maximumDiscount;
 
     if (!productMaxDiscount) {

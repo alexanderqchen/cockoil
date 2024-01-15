@@ -7,7 +7,8 @@
   {
     "id": "7788274286833",
     "title": "CockOil Brand Camo Unisex Hooded Sweatshirts",
-    "maximumDiscount": 1000
+    "maximumDiscount": 1000,
+    "qrRequired": true
   },
   {
     "id": "7725119996145",
@@ -22,12 +23,14 @@
   {
     "id": "7967862522097",
     "title": "CockOil Brand New Unisex Hats",
-    "maximumDiscount": 1000
+    "maximumDiscount": 1000,
+    "qrRequired": true
   },
   {
     "id": "7725087588593",
     "title": "CockOil Brand Unisex Hats",
-    "maximumDiscount": 1000
+    "maximumDiscount": 1000,
+    "qrRequired": true
   },
   {
     "id": "7966402085105",

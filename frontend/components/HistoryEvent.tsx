@@ -47,7 +47,7 @@ const HistoryEvent = ({
 }) => {
   if (type === "REWARD" && reward) {
     const itemCounts: { [id: string]: number } = {};
-    reward.createdFrom.items.forEach((item) => {
+    reward.createdFrom.shopifyItems.forEach((item) => {
       if (!(item in itemCounts)) {
         itemCounts[item] = 0;
       }
