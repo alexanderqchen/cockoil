@@ -173,7 +173,7 @@ const run = async () => {
     const orderData = {
       shopifyOrderId: shopifyOrder.id.toString(),
       referredById: (await getReferredByForOrder(shopifyOrder))?.id,
-      items: shopifyOrder.line_items.map(
+      shopifyItems: shopifyOrder.line_items.map(
         ({ product_id }: { product_id: number }) => product_id.toString()
       ),
       shippingName: shopifyOrder.shipping_address?.name,
