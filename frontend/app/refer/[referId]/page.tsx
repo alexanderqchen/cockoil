@@ -16,16 +16,16 @@ const ReferPage = async ({
   if (type === "u") {
     discountCode += id;
   } else {
-    const { userId } = await getUserIdFromItemId(id);
+    const { userId: registeredById } = await getUserIdFromItemId(id);
 
-    if (!userId) {
-      redirect(`/register/${id}`);
+    if (!registeredById) {
+      return redirect(`/profile/?register=${id}`);
     }
 
-    discountCode += userId;
+    discountCode += registeredById;
   }
 
-  redirect(SHOPIFY_URL + discountCode);
+  return redirect(SHOPIFY_URL + discountCode);
 };
 
 export default ReferPage;

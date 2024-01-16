@@ -11,3 +11,7 @@ export const formatDollars = (cents: number) =>
 export const formatUserUrl = (userId: string) => {
   return "https://admin.cockoil.com/refer/u" + userId;
 };
+
+export const formatItemUrl = (itemId: string) => {
+  return "https://admin.cockoil.com/refer/i" + itemId;
+};

@@ -9,7 +9,7 @@ const ShareButton = ({ url }: { url: string }) => {
   const [showToast, setShowToast] = useState(false);
 
   return (
-    <>
+    <div className="mb-8">
       <button
         onClick={() => {
           setShowToast(true);
@@ -25,7 +25,7 @@ const ShareButton = ({ url }: { url: string }) => {
         <ClipboardIcon className="size-6" />
         Copied to clipboard{" "}
       </Toast>
-    </>
+    </div>
   );
 };
 

@@ -64,6 +64,9 @@ router.get("/:userId", checkAuthorization, async (req, res) => {
     where: {
       id: userId,
     },
+    include: {
+      internalItems: true,
+    },
   });
 
   return res.status(200).json(user);

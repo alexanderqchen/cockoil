@@ -1,4 +1,4 @@
-import { fetchAPI } from "@/api";
+import { fetchAPI, Item } from "@/api";
 
 export type User = {
   id: string;
@@ -7,6 +7,7 @@ export type User = {
   referredById?: number;
   payoutMethod?: string;
   payoutUsername?: string;
+  internalItems: Item[];
   createdAt: string;
   updatedAt: string;
 };

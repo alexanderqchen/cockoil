@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { updateUser, createUser } from "@/api";
 import { cookies } from "next/headers";
+import { updateItem } from "@/api/items";
 
 export const createUserAction = async (firebaseUid: string, email: string) => {
   return await createUser(firebaseUid, email);
@@ -34,3 +35,8 @@ export const updateUserAction = async (
     payoutUsername?: string;
   }
 ) => updateUser(id, body);
+
+export const registerItemAction = async (
+  itemId: string,
+  registeredById: string
+) => await updateItem(itemId, { registeredById });

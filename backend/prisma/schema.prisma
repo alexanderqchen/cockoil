@@ -24,7 +24,7 @@ model User {
   payouts        Payout[]
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
-  Item           Item[]
+  internalItems  Item[]
 }
 
 model Order {
