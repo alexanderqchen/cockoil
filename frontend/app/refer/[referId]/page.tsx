@@ -17,6 +17,11 @@ const ReferPage = async ({
     discountCode += id;
   } else {
     const { userId } = await getUserIdFromItemId(id);
+
+    if (!userId) {
+      redirect(`/register/${id}`);
+    }
+
     discountCode += userId;
   }
 

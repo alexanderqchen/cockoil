@@ -1,7 +1,7 @@
 import type { User, PrismaClient } from "@prisma/client";
 
-export const generateReferralCode = (user: User) => {
-  return "xrefer_" + user.id.toString();
+export const generateReferralCode = (userId: string) => {
+  return "xrefer_" + userId;
 };
 
 export const getUserFromReferralCode = async (

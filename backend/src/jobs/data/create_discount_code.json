@@ -1,0 +1,10 @@
+{
+  "discount_code": {
+    "id": 17071889875185,
+    "price_rule_id": 1582841692401,
+    "code": "xrefer_test_discount_code",
+    "usage_count": 0,
+    "created_at": "2024-01-15T23:46:26-08:00",
+    "updated_at": "2024-01-15T23:46:26-08:00"
+  }
+}

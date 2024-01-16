@@ -3,6 +3,7 @@ import Joi from "joi";
 import { PayoutMethod } from "@prisma/client";
 import prisma from "../helpers/prisma";
 import { checkAuthorization, isAdminUser } from "../helpers/auth";
+import { createDiscountCode } from "../helpers/shopify";
 
 export const router = express.Router();
 
@@ -26,6 +27,16 @@ router.post("", async (req, res) => {
       email,
     },
   });
+
+  try {
+    // Create Shopify discount code for user
+    await createDiscountCode(id);
+  } catch (error) {
+    console.log(
+      `Failed to create discount code for user ${id} with error: `,
+      error
+    );
+  }
 
   return res.status(200).json(user);
 });
