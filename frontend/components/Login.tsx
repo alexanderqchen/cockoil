@@ -12,12 +12,15 @@ import {
   navigateToProfile,
 } from "@/app/actions";
 import LoadingCircle from "./LoadingCircle";
+import Toast from "./Toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
   const [createLoading, setCreateLoading] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   const handleCreateAccount = async (email: string, password: string) => {
     setCreateLoading(true);
@@ -33,8 +36,22 @@ const Login = () => {
       await setAuthCookies(firebaseUser.uid, idToken);
 
       navigateToProfile();
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      if (error?.code === "auth/missing-password") {
+        setToastVisible(true);
+        setToastMessage("Password is required");
+      } else if (error?.code === "auth/invalid-email") {
+        setToastVisible(true);
+        setToastMessage("Invalid email");
+      } else if (error?.code === "auth/weak-password") {
+        setToastVisible(true);
+        setToastMessage("Password must be at least 6 characters");
+      }
+      setTimeout(() => {
+        setToastVisible(false);
+        setToastMessage("");
+      }, 2000);
     }
     setCreateLoading(false);
   };
@@ -52,8 +69,22 @@ const Login = () => {
       await setAuthCookies(firebaseUser.uid, idToken);
 
       navigateToProfile();
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      if (error?.code === "auth/invalid-credential") {
+        setToastVisible(true);
+        setToastMessage("Password is incorrect");
+      } else if (error?.code === "auth/missing-password") {
+        setToastVisible(true);
+        setToastMessage("Password is required");
+      } else if (error?.code === "auth/invalid-email") {
+        setToastVisible(true);
+        setToastMessage("Invalid email");
+      }
+      setTimeout(() => {
+        setToastVisible(false);
+        setToastMessage("");
+      }, 2000);
     }
     setLoginLoading(false);
   };
@@ -90,6 +121,7 @@ const Login = () => {
         {loginLoading && <LoadingCircle />}
         Login
       </button>
+      <Toast visible={toastVisible}>{toastMessage}</Toast>
     </div>
   );
 };
