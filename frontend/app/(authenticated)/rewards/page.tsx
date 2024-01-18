@@ -92,6 +92,9 @@ const Rewards = async () => {
 
       <div>
         <h1 className="text-3xl font-medium mb-4">History</h1>
+        {historyItems.length === 0 && (
+          <p className="text-gray-400">Refer others to earn rewards.</p>
+        )}
         {historyItems.map(({ type, reward, payout }: HistoryItem, index) => (
           <HistoryEvent
             key={

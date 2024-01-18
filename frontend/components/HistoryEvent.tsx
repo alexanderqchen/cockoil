@@ -91,7 +91,7 @@ const HistoryEvent = ({
     );
   }
 
-  return <div>History Event</div>;
+  return null;
 };
 
 export default HistoryEvent;

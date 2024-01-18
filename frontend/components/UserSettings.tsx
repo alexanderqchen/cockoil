@@ -74,7 +74,10 @@ const UserSettings = ({ user }: { user: User }) => {
             }, 2000);
           }
         }}
-        className="w-full bg-[#432529] rounded-md h-10 font-medium"
+        className={`w-full bg-[#432529] rounded-md h-10 font-medium ${
+          loading && "bg-gray-700 cursor-not-allowed"
+        }`}
+        disabled={loading}
       >
         {loading && <LoadingCircle />}
         SAVE

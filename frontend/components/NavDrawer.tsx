@@ -24,7 +24,12 @@ const NavDrawer = ({ children }: { children: React.ReactNode }) => {
           !open && "-translate-x-full"
         } transition ease-in-out duration-300`}
       >
-        <XMarkIcon className="size-8 m-4 mb-8" onClick={() => setOpen(false)} />
+        <button>
+          <XMarkIcon
+            className="size-8 m-4 mb-8"
+            onClick={() => setOpen(false)}
+          />
+        </button>
         <ul className="text-2xl">
           <Link href="/profile" onClick={() => setOpen(false)}>
             <li

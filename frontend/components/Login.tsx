@@ -11,12 +11,16 @@ import {
   setAuthCookies,
   navigateToProfile,
 } from "@/app/actions";
+import LoadingCircle from "./LoadingCircle";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [createLoading, setCreateLoading] = useState(false);
 
   const handleCreateAccount = async (email: string, password: string) => {
+    setCreateLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -32,9 +36,11 @@ const Login = () => {
     } catch (error) {
       console.log(error);
     }
+    setCreateLoading(false);
   };
 
   const handleLogin = async (email: string, password: string) => {
+    setLoginLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -49,6 +55,7 @@ const Login = () => {
     } catch (error) {
       console.log(error);
     }
+    setLoginLoading(false);
   };
 
   return (
@@ -69,14 +76,18 @@ const Login = () => {
       />
       <button
         onClick={() => handleCreateAccount(email, password)}
+        disabled={createLoading || loginLoading}
         className="block bg-[#432529] w-full rounded-md mb-4"
       >
+        {createLoading && <LoadingCircle />}
         Create Account
       </button>
       <button
         onClick={() => handleLogin(email, password)}
+        disabled={createLoading || loginLoading}
         className="block border-2 border-[#432529] w-full rounded-md"
       >
+        {loginLoading && <LoadingCircle />}
         Login
       </button>
     </div>
