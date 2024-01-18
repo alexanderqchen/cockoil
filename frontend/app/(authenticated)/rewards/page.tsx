@@ -85,7 +85,7 @@ const Rewards = async () => {
 
   return (
     <div>
-      <div className="w-full bg-[#432529] p-8 pb-12 rounded-3xl text-center mb-8">
+      <div className="w-full max-w-96 m-auto bg-[#432529] p-8 pb-12 rounded-3xl text-center mb-8">
         <h1 className="text-2xl font-medium mb-8">Total Earned</h1>
         <p className="text-6xl font-bold">{formatDollars(totalEarned)}</p>
       </div>
