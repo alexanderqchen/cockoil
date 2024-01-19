@@ -14,7 +14,7 @@ export const formatDollars = (cents: number) =>
   `$${(Math.round(cents) / 100).toFixed(2)}`;
 
 export const formatItemUrl = (itemId: string) => {
-  return "https://admin.cockoil.com/refer/i" + itemId;
+  return "https://affiliate.cockoil.com/refer/i" + itemId;
 };
 
 export const getIdFromUrl = (urlString: string) => {

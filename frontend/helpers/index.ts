@@ -9,9 +9,9 @@ export const formatDollars = (cents: number) =>
   `$${(Math.round(cents) / 100).toFixed(2)}`;
 
 export const formatUserUrl = (userId: string) => {
-  return "https://admin.cockoil.com/refer/u" + userId;
+  return "https://affiliate.cockoil.com/refer/u" + userId;
 };
 
 export const formatItemUrl = (itemId: string) => {
-  return "https://admin.cockoil.com/refer/i" + itemId;
+  return "https://affiliate.cockoil.com/refer/i" + itemId;
 };
