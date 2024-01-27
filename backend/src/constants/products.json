@@ -2,7 +2,7 @@
   {
     "id": "7713873035505",
     "title": "CockOil Bundle Ultimate Pleasure Pack",
-    "maximumDiscount": 1000
+    "maximumDiscount": 0
   },
   {
     "id": "7788274286833",
@@ -47,12 +47,12 @@
   {
     "id": "7788387336433",
     "title": "CockOil Premium Squeeze Lubricant - 2 FL OZ",
-    "maximumDiscount": 1000
+    "maximumDiscount": 0
   },
   {
     "id": "7713871986929",
     "title": "Original Oil Drum",
-    "maximumDiscount": 1000
+    "maximumDiscount": 0
   },
-  { "id": "7713874772209", "title": "Original Sample", "maximumDiscount": 1000 }
+  { "id": "7713874772209", "title": "Original Sample", "maximumDiscount": 0 }
 ]
