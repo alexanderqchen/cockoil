@@ -3,8 +3,6 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { clearAuthCookies } from "@/app/actions";
 
-const API_ENDPOINT = "http://localhost:3001";
-
 export const fetchAPI = async (
   path: string,
   params: { [key: string]: string } = {},
@@ -14,7 +12,7 @@ export const fetchAPI = async (
   const idToken = cookies().get("firebaseIdToken")?.value;
 
   const response = await fetch(
-    API_ENDPOINT +
+    process.env.BACKEND_API_ENDPOINT +
       path +
       (!isEmpty(params) ? "?" : "") +
       new URLSearchParams(params).toString(),

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx nodemon src/index.ts",
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts",
     "script": "npx ts-node",
     "build": "npx tsc",
     "predeploy": "docker build . -t registry.digitalocean.com/experimental-software/cockoil-backend",
