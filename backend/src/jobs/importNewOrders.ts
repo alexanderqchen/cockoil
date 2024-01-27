@@ -65,6 +65,7 @@ const createShopifyParams = () => {
 
   const params: any = {
     financial_status: "paid",
+    fulfillment_status: "unfulfilled",
   };
 
   if (createdAtMin) {
@@ -104,16 +105,17 @@ const createRewardsForOrder = async (
   let maximumDiscount = 0;
 
   order.shopifyItems.forEach((productId) => {
-    const productMaxDiscount = products[productId]?.maximumDiscount;
-
-    if (!productMaxDiscount) {
+    if (!(productId in products)) {
       console.log(`Unrecognized product id ${productId}`);
     } else {
-      maximumDiscount += productMaxDiscount;
+      maximumDiscount += products[productId].maximumDiscount;
     }
   });
 
   if (maximumDiscount === 0) {
+    console.log(
+      `No rewards to create for Shopify order ${order.shopifyOrderId}`
+    );
     return [];
   }
 
@@ -150,6 +152,7 @@ const run = async () => {
   const params = createShopifyParams();
 
   console.log("Fetching order data from Shopify...");
+  console.log(`/admin/api/2023-10/orders.json?${params}`);
   const shopifyOrders = (
     await fetchShopify(`/admin/api/2023-10/orders.json?${params}`)
   ).orders;

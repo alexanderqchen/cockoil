@@ -6,6 +6,9 @@
   "scripts": {
     "start": "npx nodemon src/index.ts",
     "script": "npx ts-node",
+    "build": "npx tsc",
+    "predeploy": "docker build . -t registry.digitalocean.com/experimental-software/cockoil-backend",
+    "deploy": "docker push registry.digitalocean.com/experimental-software/cockoil-backend",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

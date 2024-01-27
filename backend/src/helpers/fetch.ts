@@ -12,7 +12,7 @@ export const fetchShopify = async (
       "Content-Type": "application/json",
       "X-Shopify-Access-Token": SHOPIFY_ACCESS_TOKEN,
     },
-    body: JSON.stringify(body),
+    ...(method !== "GET" && { body: JSON.stringify(body) }),
   });
 
   return response.json();
