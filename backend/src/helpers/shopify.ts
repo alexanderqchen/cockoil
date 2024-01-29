@@ -1,5 +1,7 @@
 import { fetchShopify } from "../helpers/fetch";
+import type { PrismaClient } from "@prisma/client";
 import { generateReferralCode } from "./referrals";
+import { getUserFromReferralCode } from "../helpers/referrals";
 
 export const createDiscountCode = async (userId: string) => {
   const discountCode = generateReferralCode(userId);
@@ -11,4 +13,37 @@ export const createDiscountCode = async (userId: string) => {
   );
 
   return response;
+};
+
+export const doesShopifyOrderExist = async (
+  shopifyOrderId: number,
+  prisma: PrismaClient
+) => {
+  const order = await prisma.order.findUnique({
+    where: {
+      shopifyOrderId: shopifyOrderId.toString(),
+    },
+  });
+
+  return !!order;
+};
+
+type DiscountCode = {
+  code: string;
+};
+
+export const getReferredByForOrder = (
+  discount_codes: DiscountCode[],
+  prisma: PrismaClient
+) => {
+  let referredBy = null;
+
+  const discountCode = discount_codes.find(
+    ({ code }: { code: string }) => code.split("_")[0] === "xrefer"
+  );
+  if (discountCode) {
+    referredBy = getUserFromReferralCode(discountCode.code, prisma);
+  }
+
+  return referredBy;
 };

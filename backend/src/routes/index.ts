@@ -6,6 +6,7 @@ import { router as usersRouter } from "./users";
 import { router as rewardsRouter } from "./rewards";
 import { router as userIdFromItemIdRouter } from "./userIdFromItemId";
 import { router as itemsRouter } from "./items";
+import { router as webhooksRouter } from "./webhooks";
 
 export const router = express.Router();
 
@@ -20,3 +21,4 @@ router.use("/users", usersRouter);
 router.use("/rewards", checkAuthorization, rewardsRouter);
 router.use("/userIdFromItemId", userIdFromItemIdRouter);
 router.use("/items", checkAuthorization, itemsRouter);
+router.use("/webhooks", webhooksRouter);

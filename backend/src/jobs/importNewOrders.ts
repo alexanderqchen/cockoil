@@ -3,24 +3,12 @@ dotenv.config();
 
 import { Command, Option } from "@commander-js/extra-typings";
 import { PrismaClient } from "@prisma/client";
-import { keyBy } from "lodash";
 import { fetchShopify } from "../helpers/fetch";
-import { getUserFromReferralCode } from "../helpers/referrals";
-import { calculateReward } from "../helpers/rewards";
-import productList from "../constants/products.json";
-
-type OrderData = {
-  shopifyOrderId: string;
-  referredById: string | undefined;
-  shopifyItems: string[];
-  shippingName: string;
-  shippingAddress1: string;
-  shippingAddress2: string;
-  shippingCity: string;
-  shippingState: string;
-  shippingZip: string;
-  shippingPhone: string;
-};
+import { createRewardsForOrder } from "../helpers/rewards";
+import {
+  doesShopifyOrderExist,
+  getReferredByForOrder,
+} from "../helpers/shopify";
 
 const prisma = new PrismaClient();
 
@@ -34,8 +22,6 @@ const program = new Command()
   .addOption(new Option("--verbose", "Print orders to create"))
   .parse();
 const options = program.opts();
-
-const products = keyBy(productList, "id");
 
 const createShopifyParams = () => {
   const now = new Date();
@@ -75,79 +61,6 @@ const createShopifyParams = () => {
   return new URLSearchParams(params);
 };
 
-const doesOrderExist = async (shopifyOrder: any) => {
-  const order = await prisma.order.findUnique({
-    where: {
-      shopifyOrderId: shopifyOrder.id.toString(),
-    },
-  });
-
-  return !!order;
-};
-
-const getReferredByForOrder = (shopifyOrder: any) => {
-  let referredBy = null;
-
-  const discountCode = shopifyOrder.discount_codes.find(
-    ({ code }: { code: string }) => code.split("_")[0] === "xrefer"
-  );
-  if (discountCode) {
-    referredBy = getUserFromReferralCode(discountCode.code, prisma);
-  }
-
-  return referredBy;
-};
-
-const createRewardsForOrder = async (
-  order: OrderData,
-  prisma: PrismaClient
-) => {
-  let maximumDiscount = 0;
-
-  order.shopifyItems.forEach((productId) => {
-    if (!(productId in products)) {
-      console.log(`Unrecognized product id ${productId}`);
-    } else {
-      maximumDiscount += products[productId].maximumDiscount;
-    }
-  });
-
-  if (maximumDiscount === 0) {
-    console.log(
-      `No rewards to create for Shopify order ${order.shopifyOrderId}`
-    );
-    return [];
-  }
-
-  let referredById = order.referredById || null;
-  // let referredById = 2 as number | null; // For testing purposes
-  let distance = 0;
-
-  const rewards = [];
-
-  while (referredById) {
-    const user = await prisma.user.findUnique({
-      where: {
-        id: referredById,
-      },
-    });
-
-    if (!user) {
-      break;
-    }
-
-    rewards.push({
-      amount: calculateReward(maximumDiscount, distance),
-      givenToId: referredById,
-    });
-
-    referredById = user.referredById;
-    distance++;
-  }
-
-  return rewards;
-};
-
 const run = async () => {
   const params = createShopifyParams();
 
@@ -169,13 +82,15 @@ const run = async () => {
   const ordersToCreate = [];
 
   for (const shopifyOrder of shopifyOrders) {
-    if (await doesOrderExist(shopifyOrder)) {
+    if (await doesShopifyOrderExist(shopifyOrder.id, prisma)) {
       continue;
     }
 
     const orderData = {
       shopifyOrderId: shopifyOrder.id.toString(),
-      referredById: (await getReferredByForOrder(shopifyOrder))?.id,
+      referredById: (
+        await getReferredByForOrder(shopifyOrder.discount_codes, prisma)
+      )?.id,
       shopifyItems: shopifyOrder.line_items.map(
         ({ product_id }: { product_id: number }) => product_id.toString()
       ),
