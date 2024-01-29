@@ -16,29 +16,9 @@ router.post("/order-paid", async (req, res) => {
 
   const bodySchema = Joi.object({
     id: Joi.number().required(),
-    line_items: Joi.array()
-      .items(
-        Joi.object({
-          product_id: Joi.number(),
-        })
-      )
-      .default([]),
-    discount_codes: Joi.array()
-      .items(
-        Joi.object({
-          code: Joi.string(),
-        })
-      )
-      .default([]),
-    shipping_address: Joi.object({
-      name: Joi.string(),
-      address1: Joi.string(),
-      address2: Joi.string(),
-      city: Joi.string(),
-      province_code: Joi.string(),
-      zip: Joi.string(),
-      phone: Joi.string(),
-    }),
+    line_items: Joi.array().items(Joi.any()).default([]),
+    discount_codes: Joi.array().items(Joi.any()).default([]),
+    shipping_address: Joi.any(),
   });
 
   const { error: bodyError, value: body } = bodySchema.validate(req.body);
