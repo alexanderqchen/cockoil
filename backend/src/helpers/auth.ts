@@ -17,6 +17,7 @@ export const auth = getAuth(app);
 export const isAdminUser = (userId: string) => {
   const adminWhitelist = [
     "LfuMBDFrx1QLa63lN7lfKE7JPHs1", // alexander.qili.chen@gmail.com (dev)
+    "vBrZEO0kUZYJIQTxTy1GPLBjTS42", // alexander.qili.chen@gmail.com (prod)
   ];
   return adminWhitelist.includes(userId);
 };
