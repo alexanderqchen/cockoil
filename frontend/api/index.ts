@@ -23,7 +23,6 @@ export const fetchAPI = async (
       (!isEmpty(params) ? "?" : "") +
       new URLSearchParams(params).toString()
   );
-  console.log("With this data:", ...(body && { body: JSON.stringify(body) }));
 
   const response = await fetch(
     process.env.BACKEND_API_ENDPOINT +
