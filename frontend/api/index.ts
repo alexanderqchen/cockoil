@@ -11,19 +11,6 @@ export const fetchAPI = async (
 ) => {
   const idToken = cookies().get("firebaseIdToken")?.value;
 
-  console.log(
-    "in fetchAPI with api endpoint: ",
-    process.env.BACKEND_API_ENDPOINT
-  );
-
-  console.log(
-    "Fetching this url:",
-    process.env.BACKEND_API_ENDPOINT +
-      path +
-      (!isEmpty(params) ? "?" : "") +
-      new URLSearchParams(params).toString()
-  );
-
   const response = await fetch(
     process.env.BACKEND_API_ENDPOINT +
       path +
@@ -39,8 +26,6 @@ export const fetchAPI = async (
       ...(body && { body: JSON.stringify(body) }),
     }
   );
-
-  console.log("fetched api with response:", response);
 
   const responseJson = await response.json();
 

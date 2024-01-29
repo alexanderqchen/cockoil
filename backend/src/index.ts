@@ -6,10 +6,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { router } from "./routes";
 
-const corsWhitelist = [
-  "https://cockoil-frontend.vercel.app/",
-  "https://cockoil-frontend-admin.vercel.app/",
-];
+const corsWhitelist = ["https://google.com"];
 
 const app = express();
 app.use(bodyParser.json());

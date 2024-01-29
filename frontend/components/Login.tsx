@@ -35,7 +35,7 @@ const Login = () => {
       await createUserAction(firebaseUser.uid, email);
       await setAuthCookies(firebaseUser.uid, idToken);
 
-      navigateToProfile();
+      await navigateToProfile();
     } catch (error: any) {
       console.log(error);
       if (error?.code === "auth/missing-password") {
@@ -47,7 +47,11 @@ const Login = () => {
       } else if (error?.code === "auth/weak-password") {
         setToastVisible(true);
         setToastMessage("Password must be at least 6 characters");
+      } else if (error?.code === "auth/email-already-in-use") {
+        setToastVisible(true);
+        setToastMessage("Email already in use");
       }
+
       setTimeout(() => {
         setToastVisible(false);
         setToastMessage("");
@@ -68,7 +72,7 @@ const Login = () => {
       const idToken = await firebaseUser.getIdToken();
       await setAuthCookies(firebaseUser.uid, idToken);
 
-      navigateToProfile();
+      await navigateToProfile();
     } catch (error: any) {
       console.log(error);
       if (error?.code === "auth/invalid-credential") {
