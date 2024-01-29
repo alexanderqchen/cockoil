@@ -6,9 +6,18 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { router } from "./routes";
 
+const corsWhitelist = [
+  "https://cockoil-frontend.vercel.app/",
+  "https://cockoil-frontend-admin.vercel.app/",
+];
+
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: corsWhitelist,
+  })
+);
 
 app.use("/", router);
 
