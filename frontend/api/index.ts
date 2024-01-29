@@ -11,6 +11,11 @@ export const fetchAPI = async (
 ) => {
   const idToken = cookies().get("firebaseIdToken")?.value;
 
+  console.log(
+    "in fetchAPI with api endpoint: ",
+    process.env.BACKEND_API_ENDPOINT
+  );
+
   const response = await fetch(
     process.env.BACKEND_API_ENDPOINT +
       path +
