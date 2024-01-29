@@ -1,16 +1,23 @@
 import { initializeApp, cert, ServiceAccount } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
-import serviceAccount from "../firebase-creds.json";
+import serviceAccountProd from "../firebase-creds.json";
+import serviceAccountDev from "../firebase-creds-dev.json";
 import { RequestHandler } from "express";
 
+const serviceAccount = (
+  process.env.ENV === "PROD" ? serviceAccountProd : serviceAccountDev
+) as ServiceAccount;
+
 const app = initializeApp({
-  credential: cert(serviceAccount as ServiceAccount),
+  credential: cert(serviceAccount),
 });
 
 export const auth = getAuth(app);
 
 export const isAdminUser = (userId: string) => {
-  const adminWhitelist = ["uROkkEChdQXVBmzDKx6aApKRwZS2"];
+  const adminWhitelist = [
+    "LfuMBDFrx1QLa63lN7lfKE7JPHs1", // alexander.qili.chen@gmail.com (dev)
+  ];
   return adminWhitelist.includes(userId);
 };
 
