@@ -16,6 +16,15 @@ export const fetchAPI = async (
     process.env.BACKEND_API_ENDPOINT
   );
 
+  console.log(
+    "Fetching this url:",
+    process.env.BACKEND_API_ENDPOINT +
+      path +
+      (!isEmpty(params) ? "?" : "") +
+      new URLSearchParams(params).toString()
+  );
+  console.log("With this data:", ...(body && { body: JSON.stringify(body) }));
+
   const response = await fetch(
     process.env.BACKEND_API_ENDPOINT +
       path +
@@ -31,6 +40,8 @@ export const fetchAPI = async (
       ...(body && { body: JSON.stringify(body) }),
     }
   );
+
+  console.log("fetched api with response:", response);
 
   const responseJson = await response.json();
 
