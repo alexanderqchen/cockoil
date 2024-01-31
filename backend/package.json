@@ -10,6 +10,7 @@
     "build": "npx tsc",
     "predeploy": "docker build . -t registry.digitalocean.com/experimental-software/cockoil-backend",
     "deploy": "docker push registry.digitalocean.com/experimental-software/cockoil-backend",
+    "deploy-serverless": "doctl serverless connect cockoil && doctl serverless deploy serverless",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

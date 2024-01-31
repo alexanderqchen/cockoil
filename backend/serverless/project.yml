@@ -1,0 +1,17 @@
+packages:
+  - name: cron
+    environment:
+      BACKEND_API_ENDPOINT: "https://cockoil-backend-yfyh2.ondigitalocean.app"
+    functions:
+      - name: create-payouts
+        binary: false
+        main: ""
+        runtime: "nodejs:18"
+        web: true
+        triggers:
+          - name: monthly
+            sourceType: scheduler
+            sourceDetails:
+              cron: 0 7 1 * *
+        limits:
+          timeout: 30000
