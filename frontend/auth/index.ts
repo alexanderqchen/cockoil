@@ -27,9 +27,6 @@ const firebaseConfigProd = {
   measurementId: "G-VNRHC7TWVE",
 };
 
-console.log("env", process.env.ENV);
-console.log("= check", process.env.ENV === "PROD");
-
 const firebaseConfig =
   process.env.ENV === "PROD" ? firebaseConfigProd : firebaseConfigDev;
 

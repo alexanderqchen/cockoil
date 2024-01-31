@@ -1,13 +1,12 @@
 import express from "express";
 import Joi from "joi";
-import { OrderStatus } from "@prisma/client";
 import prisma from "../helpers/prisma";
-import type { Item } from "@prisma/client";
 import {
   doesShopifyOrderExist,
   getReferredByForOrder,
 } from "../helpers/shopify";
 import { createRewardsForOrder } from "../helpers/rewards";
+import { generatePayoutsForUsers } from "../helpers/payouts";
 
 export const router = express.Router();
 
@@ -72,4 +71,29 @@ router.post("/order-paid", async (req, res) => {
   });
 
   return res.status(200).json(order);
+});
+
+router.post("/create-payouts", async (req, res) => {
+  console.log("Querying all users in db...");
+  const users = await prisma.user.findMany();
+
+  console.log(`Calculating payouts for ${users.length} users...`);
+  const payoutsToCreate = await generatePayoutsForUsers(users, prisma);
+
+  console.log("Payouts to create:");
+  console.log(payoutsToCreate);
+
+  let numPayoutsCreated = 0;
+
+  console.log(`Creating ${payoutsToCreate.length} payouts...`);
+  const createManyResponse = await prisma.payout.createMany({
+    data: payoutsToCreate,
+  });
+  numPayoutsCreated = createManyResponse.count;
+
+  console.log(
+    `Created ${numPayoutsCreated} / ${payoutsToCreate.length} Payouts.`
+  );
+
+  return res.status(200).json(createManyResponse);
 });

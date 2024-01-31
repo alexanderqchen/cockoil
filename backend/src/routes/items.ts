@@ -35,10 +35,38 @@ router.patch("/:itemId", async (req, res) => {
     where: {
       id: itemId,
     },
+    include: {
+      createdFrom: true,
+    },
   });
 
+  if (!item) {
+    return res.status(400).json("Product does not exist");
+  }
   if (item?.registeredById) {
     return res.status(400).json("Product already registered");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: registeredById,
+    },
+  });
+
+  if (!user) {
+    return res.status(400).json("User does not exist");
+  }
+
+  if (!user.referredById) {
+    // For the first registered product, set the user's referredById
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        referredById: item.createdFrom.referredById,
+      },
+    });
   }
 
   const updatedItem = await prisma.item.update({
