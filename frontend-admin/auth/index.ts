@@ -18,7 +18,7 @@ const firebaseConfigDev = {
 
 const firebaseConfigProd = {
   apiKey: "AIzaSyDoDpz7HAJ1JYXxCV7LLKLH0mDB6Rhm1BM",
-  authDomain: "cockoil.firebaseapp.com",
+  authDomain: "admin.cockoil.com",
   projectId: "cockoil",
   storageBucket: "cockoil.appspot.com",
   messagingSenderId: "98151276166",
