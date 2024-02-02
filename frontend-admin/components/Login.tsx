@@ -6,6 +6,7 @@ import {
   getRedirectResult,
   GoogleAuthProvider,
   onAuthStateChanged,
+  User,
 } from "firebase/auth";
 import { auth } from "@/auth";
 import { setAuthCookies, navigateToOrders } from "@/app/actions";
@@ -19,10 +20,11 @@ const Login = () => {
   useEffect(() => {
     console.log("in useeffect");
 
-    const checkAuthRedirect = async () => {
+    const checkAuthRedirect = async (authStateUser: User) => {
       setLoading(true);
 
       console.log("in check auth redirect");
+      console.log("authStateUser", authStateUser);
       try {
         const result = await getRedirectResult(auth);
 
