@@ -8,6 +8,7 @@ export const setAuthCookies = async (
   firebaseUid: string,
   firebaseIdToken: string
 ) => {
+  // Won't be set on localhost because secure setting requires https
   cookies().set("firebaseUid", firebaseUid, { secure: true });
   cookies().set("firebaseIdToken", firebaseIdToken, { secure: true });
 };
