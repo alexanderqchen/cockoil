@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { auth } from "@/auth";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -11,6 +12,7 @@ import {
   setAuthCookies,
   navigateToProfile,
 } from "@/app/actions";
+import GoogleLogo from "./GoogleLogo";
 import LoadingCircle from "./LoadingCircle";
 import Toast from "./Toast";
 
@@ -19,6 +21,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
   const [createLoading, setCreateLoading] = useState(false);
+  const [googleSignInLoading, setGoogleSignInLoading] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
@@ -84,13 +87,49 @@ const Login = () => {
       } else if (error?.code === "auth/invalid-email") {
         setToastVisible(true);
         setToastMessage("Invalid email");
+      } else {
+        setToastVisible(true);
+        setToastMessage("An error occurred");
       }
+
       setTimeout(() => {
         setToastVisible(false);
         setToastMessage("");
       }, 2000);
     }
     setLoginLoading(false);
+  };
+
+  const handleGoogleSignIn = async () => {
+    setGoogleSignInLoading(true);
+
+    try {
+      const result = await signInWithPopup(auth, new GoogleAuthProvider());
+
+      if (result) {
+        const firebaseUser = result.user;
+        const idToken = await firebaseUser.getIdToken();
+
+        console.log("result", result);
+
+        await createUserAction(firebaseUser.uid, email);
+
+        await setAuthCookies(firebaseUser.uid, idToken);
+        await navigateToProfile();
+      }
+    } catch (error) {
+      console.log(error);
+
+      setToastVisible(true);
+      setToastMessage("An error occurred");
+
+      setTimeout(() => {
+        setToastVisible(false);
+        setToastMessage("");
+      }, 2000);
+    }
+
+    setGoogleSignInLoading(false);
   };
 
   return (
@@ -111,7 +150,7 @@ const Login = () => {
       />
       <button
         onClick={() => handleCreateAccount(email, password)}
-        disabled={createLoading || loginLoading}
+        disabled={createLoading || loginLoading || googleSignInLoading}
         className="block bg-[#432529] w-full rounded-md mb-4"
       >
         {createLoading && <LoadingCircle />}
@@ -119,11 +158,19 @@ const Login = () => {
       </button>
       <button
         onClick={() => handleLogin(email, password)}
-        disabled={createLoading || loginLoading}
-        className="block border-2 border-[#432529] w-full rounded-md"
+        disabled={createLoading || loginLoading || googleSignInLoading}
+        className="block border-2 border-[#432529] w-full rounded-md mb-4"
       >
         {loginLoading && <LoadingCircle />}
         Login
+      </button>
+      <button
+        onClick={() => handleGoogleSignIn()}
+        disabled={createLoading || loginLoading || googleSignInLoading}
+        className="block bg-white w-full rounded-md text-black flex items-center justify-center gap-2"
+      >
+        {googleSignInLoading && <LoadingCircle />}
+        <GoogleLogo /> Sign In with Google
       </button>
       <Toast visible={toastVisible}>{toastMessage}</Toast>
     </div>

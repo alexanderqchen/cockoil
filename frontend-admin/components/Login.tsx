@@ -1,11 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  signInWithPopup,
-  getRedirectResult,
-  GoogleAuthProvider,
-} from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "@/auth";
 import { setAuthCookies, navigateToOrders } from "@/app/actions";
 import LoadingCircle from "@/components/LoadingCircle";
