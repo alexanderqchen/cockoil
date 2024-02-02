@@ -20,7 +20,7 @@ const Login = () => {
   useEffect(() => {
     console.log("in useeffect");
 
-    const checkAuthRedirect = async (authStateUser: User) => {
+    const checkAuthRedirect = async (authStateUser: User | null) => {
       setLoading(true);
 
       console.log("in check auth redirect");
