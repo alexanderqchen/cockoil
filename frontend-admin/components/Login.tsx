@@ -16,18 +16,21 @@ const Login = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log("in useeffect");
     const checkAuthRedirect = async () => {
+      console.log("in check auth redirect");
       try {
         const result = await getRedirectResult(auth);
 
         if (result) {
           const firebaseUser = result.user;
           const idToken = await firebaseUser.getIdToken();
-
+          console.log("setting cookies");
           await setAuthCookies(firebaseUser.uid, idToken);
-
+          console.log("redirecting");
           navigateToOrders();
         } else {
+          console.log("no redirect results");
           setLoading(false);
         }
       } catch (error) {
@@ -40,6 +43,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
+      console.log("signing in...");
       await signInWithRedirect(auth, provider);
     } catch (error) {
       console.log(error);
