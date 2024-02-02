@@ -22,6 +22,8 @@ const Login = () => {
       try {
         const result = await getRedirectResult(auth);
 
+        console.log(result);
+
         if (result) {
           const firebaseUser = result.user;
           const idToken = await firebaseUser.getIdToken();
