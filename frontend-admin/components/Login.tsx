@@ -5,6 +5,7 @@ import {
   signInWithRedirect,
   getRedirectResult,
   GoogleAuthProvider,
+  onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "@/auth";
 import { setAuthCookies, navigateToOrders } from "@/app/actions";
@@ -13,11 +14,14 @@ import LoadingCircle from "@/components/LoadingCircle";
 const provider = new GoogleAuthProvider();
 
 const Login = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     console.log("in useeffect");
+
     const checkAuthRedirect = async () => {
+      setLoading(true);
+
       console.log("in check auth redirect");
       try {
         const result = await getRedirectResult(auth);
@@ -40,7 +44,7 @@ const Login = () => {
       }
     };
 
-    checkAuthRedirect();
+    onAuthStateChanged(auth, checkAuthRedirect);
   }, []);
 
   const handleLogin = async () => {
