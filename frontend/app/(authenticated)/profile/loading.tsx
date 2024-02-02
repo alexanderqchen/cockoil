@@ -2,7 +2,7 @@ import { ArrowUpTrayIcon } from "@heroicons/react/24/outline";
 
 const Profile = async () => {
   return (
-    <div className="text-center">
+    <div className="text-center max-w-2xl m-auto">
       <div className="bg-gray-600 animate-pulse w-48 m-auto rounded-md">
         <h1 className="text-4xl font-bold mb-4 invisible">Name</h1>
       </div>

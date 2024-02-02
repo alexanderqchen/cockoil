@@ -9,7 +9,7 @@ type Props = {
 
 const Home = ({ searchParams }: Props) => {
   return (
-    <div className="p-8">
+    <div className="p-8 max-w-2xl m-auto">
       <Image src={Logo} alt="logo" className="m-auto py-4" />
       <Login />
       {searchParams.toast && <Toast visible={true}>{searchParams.toast}</Toast>}

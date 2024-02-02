@@ -18,7 +18,7 @@ const Profile = async ({ searchParams }: Props) => {
   const referUrl = formatUserUrl(id);
 
   return (
-    <div className="text-center">
+    <div className="text-center max-w-2xl m-auto">
       <h1 className="text-4xl font-bold mb-4">{name}</h1>
       <QRCode
         className="bg-white p-4 w-full max-w-96 m-auto h-auto rounded-3xl border-8 border-[#432529] mb-4"

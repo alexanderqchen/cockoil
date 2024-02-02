@@ -7,7 +7,7 @@ const Settings = async () => {
   const user = await getUser(userId);
 
   return (
-    <div className="text-xl leading-10">
+    <div className="text-xl leading-10 max-w-2xl m-auto">
       <UserSettings user={user} />
     </div>
   );
