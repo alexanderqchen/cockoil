@@ -112,7 +112,7 @@ const Login = () => {
 
         console.log("result", result);
 
-        await createUserAction(firebaseUser.uid, email);
+        await createUserAction(firebaseUser.uid, firebaseUser.email || "");
 
         await setAuthCookies(firebaseUser.uid, idToken);
         await navigateToProfile();

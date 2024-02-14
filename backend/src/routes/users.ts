@@ -16,6 +16,7 @@ router.post("", async (req, res) => {
   const { error: bodyError, value: body } = bodySchema.validate(req.body);
 
   if (bodyError) {
+    console.log("Body error: ", bodyError);
     return res.status(400).json({ error: { bodyError } });
   }
 
@@ -28,6 +29,7 @@ router.post("", async (req, res) => {
   });
 
   if (existingUser) {
+    console.log("user already created");
     return res.status(200).json("User already created");
   }
 

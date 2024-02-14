@@ -38,6 +38,8 @@ export const checkAuthorization: RequestHandler = async (req, res, next) => {
     }
   } catch (error: any) {
     console.log(error);
+    console.log("idToken", idToken);
+
     if (error?.errorInfo?.code === "auth/id-token-expired") {
       return res.status(401).json({
         error: {
