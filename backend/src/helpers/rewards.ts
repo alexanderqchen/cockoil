@@ -47,10 +47,11 @@ export const createRewardsForOrder = async (
   let referredById = order.referredById || null;
   // let referredById = 2 as number | null; // For testing purposes
   let distance = 0;
+  let seenUsers = new Set();
 
   const rewards = [];
 
-  while (referredById) {
+  while (referredById && !seenUsers.has(referredById)) {
     const user = await prisma.user.findUnique({
       where: {
         id: referredById,
@@ -68,6 +69,7 @@ export const createRewardsForOrder = async (
 
     referredById = user.referredById;
     distance++;
+    seenUsers.add(user.id);
   }
 
   return rewards;

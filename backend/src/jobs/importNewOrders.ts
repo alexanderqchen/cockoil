@@ -51,7 +51,7 @@ const createShopifyParams = () => {
 
   const params: any = {
     financial_status: "paid",
-    fulfillment_status: "unfulfilled",
+    // fulfillment_status: "unfulfilled",
   };
 
   if (createdAtMin) {
@@ -103,7 +103,9 @@ const run = async () => {
       shippingPhone: shopifyOrder.shipping_address?.phone,
     };
 
+    console.log("Creating order", orderData);
     const rewards = await createRewardsForOrder(orderData, prisma);
+    console.log("Created rewards");
 
     ordersToCreate.push({
       ...orderData,

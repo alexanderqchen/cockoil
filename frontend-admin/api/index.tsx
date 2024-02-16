@@ -1,3 +1,5 @@
+"use server";
+
 import { isEmpty } from "lodash";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -29,7 +31,6 @@ export const fetchAPI = async (
   const responseJson = await response.json();
 
   if (responseJson.error?.authError) {
-    clearAuthCookies();
     return redirect(`/?toast=${responseJson.error.authError}`);
   }
 
