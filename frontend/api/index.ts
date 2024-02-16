@@ -30,7 +30,6 @@ export const fetchAPI = async (
   const responseJson = await response.json();
 
   if (responseJson.error?.authError) {
-    clearAuthCookies();
     return redirect(`/?toast=${responseJson.error.authError}`);
   }
 
