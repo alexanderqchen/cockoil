@@ -3,6 +3,8 @@ import type { Payout, Reward } from "@/api";
 import { formatDollars } from "@/helpers";
 import HistoryEvent from "@/components/HistoryEvent";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { getUser } from "@/api";
 
 export type HistoryItem = {
   type: "PAYOUT" | "REWARD";
@@ -77,6 +79,12 @@ const combineHistoryItems = (
 
 const Rewards = async () => {
   const userId = cookies().get("firebaseUid")?.value || "";
+  const user = await getUser(userId);
+
+  if (!user.name) {
+    redirect("/setup");
+  }
+
   const { data: payouts } = await getUserPayouts(userId);
   const { data: rewards } = await getUserRewards(userId);
 
@@ -100,6 +108,7 @@ const Rewards = async () => {
             key={
               (reward?.id && `r${reward.id}`) || (payout?.id && `p${payout.id}`)
             }
+            userId={userId}
             type={type}
             reward={reward}
             payout={payout}

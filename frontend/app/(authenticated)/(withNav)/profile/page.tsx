@@ -4,6 +4,7 @@ import ShareButton from "@/components/ShareButton";
 import { cookies } from "next/headers";
 import { formatUserUrl, formatItemUrl } from "@/helpers";
 import RegisterProductModal from "@/components/RegisterProductModal";
+import { redirect } from "next/navigation";
 
 type Props = {
   searchParams: { [key: string]: string | undefined };
@@ -12,6 +13,10 @@ type Props = {
 const Profile = async ({ searchParams }: Props) => {
   const firebaseUid = cookies().get("firebaseUid")?.value || "";
   const { id, name, internalItems } = await getUser(firebaseUid);
+
+  if (!name) {
+    redirect("/setup");
+  }
 
   const { register } = searchParams;
 

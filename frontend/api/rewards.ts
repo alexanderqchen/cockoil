@@ -6,6 +6,7 @@ export type Reward = {
   amount: number;
   createdFromId: number;
   createdFrom: Order;
+  givenTo: User;
   givenToId: number;
   createdAt: string;
   updatedAt: string;

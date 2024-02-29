@@ -37,7 +37,15 @@ router.get("/", async (req, res) => {
     ] as any,
     where,
     include: {
-      createdFrom: true,
+      createdFrom: {
+        include: {
+          rewards: {
+            include: {
+              givenTo: true,
+            },
+          },
+        },
+      },
     },
   };
 

@@ -62,6 +62,7 @@ export type Order = {
   shippingState: string;
   shippingZip: string;
   shippingPhone: string;
+  rewards: Reward[];
 };
 
 import type { Payout } from "./payouts";

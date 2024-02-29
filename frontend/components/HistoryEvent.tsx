@@ -35,16 +35,28 @@ const Event = ({
 );
 
 const HistoryEvent = ({
+  userId,
   type,
   reward,
   payout,
   hideLine,
 }: {
+  userId: string;
   type: "REWARD" | "PAYOUT";
   reward?: Reward;
   payout?: Payout;
   hideLine: boolean;
 }) => {
+  const allRewards = reward?.createdFrom.rewards || [];
+  const originalReferrer =
+    allRewards.reduce((maxReward, reward) =>
+      reward.amount > maxReward.amount ? reward : maxReward
+    ).givenTo || "your";
+  const referrerName =
+    originalReferrer.id === userId
+      ? "your"
+      : `${originalReferrer.name}'s` || "a";
+
   if (type === "REWARD" && reward) {
     const itemCounts: { [id: string]: number } = {};
     reward.createdFrom.shopifyItems.forEach((item) => {
@@ -61,7 +73,10 @@ const HistoryEvent = ({
         title={`You earned ${formatDollars(reward.amount)}`}
         description={
           <>
-            <p>Someone used your code to buy:</p>
+            <p>
+              {reward.createdFrom.shippingName || "Someone"} used {referrerName}{" "}
+              code to buy:
+            </p>
             {Object.keys(itemCounts).map((itemId) => (
               <p key={itemId}>
                 {itemCounts[itemId]} x {products[itemId].title}
