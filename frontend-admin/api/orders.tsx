@@ -19,7 +19,7 @@ export type Order = {
   shippingPhone: string;
 };
 
-export const getOrder = async (orderId: number) => {
+export const getOrder = async (orderId: number): Promise<Order> => {
   const response = await fetchAPI(`/orders/${orderId}`);
 
   return response;

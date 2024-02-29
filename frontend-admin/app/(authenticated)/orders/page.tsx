@@ -73,6 +73,10 @@ const Orders = async ({ searchParams }: Props) => {
             title: "Order Date",
             key: "createdAt",
           },
+          {
+            title: "",
+            key: "actions",
+          },
         ]}
         items={formattedOrders}
       />

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import PaginationFooter from "@/components/PaginationFooter";
 
 type Column = {
@@ -94,6 +95,13 @@ const Table = ({
                     >
                       {item[key]}
                     </a>
+                  ) : key === "actions" ? (
+                    <Link
+                      href={`/orders/${item.id}`}
+                      className="border-2 p-1 rounded-md"
+                    >
+                      Open
+                    </Link>
                   ) : (
                     item[key]
                   )}
