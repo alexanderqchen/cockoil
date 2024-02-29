@@ -7,8 +7,8 @@ const OrderLayout = ({ children }: { children: React.ReactNode }) => {
       <Sidebar
         items={[
           { title: "Orders", route: "/orders" },
-          { title: "Payouts", route: "/payouts", active: true },
-          { title: "Utilities", route: "/utilities" },
+          { title: "Payouts", route: "/payouts" },
+          { title: "Utilities", route: "/utilities", active: true },
         ]}
       />
 

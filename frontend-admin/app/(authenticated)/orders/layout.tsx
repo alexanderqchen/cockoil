@@ -8,6 +8,7 @@ const OrderLayout = ({ children }: { children: React.ReactNode }) => {
         items={[
           { title: "Orders", route: "/orders", active: true },
           { title: "Payouts", route: "/payouts" },
+          { title: "Utilities", route: "/utilities" },
         ]}
       />
 
